@@ -1,12 +1,11 @@
-set nu " set number on
-set listchars=tab:->,trail:-,eol:$ " set list chars
-set list
-set ts=4 sts=4 sw=4 tw=100 " set tablestop softtablestop shiftwidth textwidth
-set ai ci " set autoindent set cindent
-set encoding=utf8 " set encoding
-set ff=unix " set fileformart
-set hls " set highlightsearch
+se nu " set number on
+se listchars=tab:->,trail:-,eol:$ " set list chars
+se list
+se ts=4 sts=4 sw=4 tw=100 " set tablestop softtablestop shiftwidth textwidth
+se ai ci " set autoindent set cindent
+se encoding=utf8 " set encoding
+se ff=unix " set fileformart
+se hls " set highlightsearch
 " set cursorline
-se cursorcolumn
 se ruler
-se highlight cursorline ctermbg=gray ctermfg=white
+highlight cursorline ctermbg=gray ctermfg=white
