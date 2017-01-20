@@ -8,4 +8,6 @@ se ff=unix " set fileformart
 se hls " set highlightsearch
 " set cursorline
 se ruler
+se sc " set showcmd
+se smd" se showmod
 highlight cursorline ctermbg=gray ctermfg=white
