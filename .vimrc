@@ -10,4 +10,5 @@ se hls " set highlightsearch
 se ruler
 se sc " set showcmd
 se smd" se showmod
+se expandtab
 highlight cursorline ctermbg=gray ctermfg=white
