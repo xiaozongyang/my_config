@@ -44,6 +44,4 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
  
 Bundle 'Valloric/YouCompleteMe'
-Bundle 'slimv.vim'
-let g:slimv_swank_cmd = '! xterm -e clisp -i /home/leo/.vim/slime/start-swank.lisp &'
 
