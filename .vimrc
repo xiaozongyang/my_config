@@ -18,6 +18,7 @@ set nocompatible               " be iMproved
 filetype off                   " required!
  
 set backspace=indent,eol,start " enable backspace to delete
+filetype plugin indent on " auto-detect file type
 
 """"""""""""" tmux configs """""""""""""""""""
 " change cursor shape in tmux
@@ -42,6 +43,18 @@ call vundle#rc()
 " let Vundle manage Vundle
 " required!
 Bundle 'gmarik/vundle'
- 
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'maksimr/vim-jsbeautify'
+Plugin 'editorconfig-vim' " config indent_style and indent_size, etc.
 
+" for js
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for json
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" for jsx
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" for html
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+nmap <c-p> :set paste! <cr>
