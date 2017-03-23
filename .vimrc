@@ -3,6 +3,8 @@ set nu " set number on
 set listchars=tab:->,trail:-,eol:$ " set list chars
 set list
 set expandtab
+set ls=2 " set lastline=2  show statusline
+set t_Co=256 " export TERM=xterm-256color before
 highlight cursorline ctermbg=gray ctermfg=white
 
 set nocompatible               " be iMproved
@@ -28,10 +30,6 @@ if exists('$TMUX')
   set term=screen-256color
 endif
 
-" use Vundle to manage bundles
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
- 
 """"""""""""""""""""program templates"""""""""""""""""""
 autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
 
@@ -43,6 +41,7 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
+Plug 'https://github.com/noplans/lightline.vim.git'
 call plug#end()
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -50,3 +49,11 @@ xmap ga <Plug>(EasyAlign)
 "
 " " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+" map ^T to toggle NERDTree
+map <C-t> :NERDTreeToggle<CR>
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ }
+
