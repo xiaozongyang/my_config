@@ -4,6 +4,7 @@ set listchars=tab:->,trail:-,eol:$ " set list chars
 set list
 set expandtab
 set ls=2 " set lastline=2  show statusline
+set hls " set highlightsearch
 set t_Co=256 " export TERM=xterm-256color before
 highlight cursorline ctermbg=gray ctermfg=white
 
@@ -33,16 +34,27 @@ endif
 """"""""""""""""""""program templates"""""""""""""""""""
 autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
 
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !./install.py
+  endif
+endfunction
+
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', {'do': function('BuildYCM')}
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'https://github.com/noplans/lightline.vim.git'
 call plug#end()
+
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
