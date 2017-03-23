@@ -3,6 +3,9 @@ set nu " set number on
 set listchars=tab:->,trail:-,eol:$ " set list chars
 set list
 set expandtab
+set tw =100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
+set enc=utf8 fenc=utf8 ff=unix " set encoding, fileencoding, fileformat
+set sc smd " show command and mode
 set ls=2 " set lastline=2  show statusline
 set hls " set highlightsearch
 set t_Co=256 " export TERM=xterm-256color before
