@@ -72,3 +72,5 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }
 
+noremap <C-w>d <Esc>:r !date +\%Y-\%m-\%d <CR>
+
