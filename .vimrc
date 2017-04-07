@@ -34,9 +34,6 @@ if exists('$TMUX')
   set term=screen-256color
 endif
 
-""""""""""""""""""""program templates"""""""""""""""""""
-autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
-
 function! BuildYCM(info)
   " info is a dictionary with 3 fields
   " - name:   name of the plugin
@@ -52,10 +49,11 @@ endfunction
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
 Plug 'Valloric/YouCompleteMe', {'do': function('BuildYCM')}
-Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
-Plug 'https://github.com/noplans/lightline.vim.git'
+Plug 'noplans/lightline.vim'
+Plug 'JamshedVesuna/vim-markdown-preview' " markdown preview tool
 call plug#end()
 
 
@@ -68,9 +66,55 @@ nmap ga <Plug>(EasyAlign)
 " map ^T to toggle NERDTree
 map <C-t> :NERDTreeToggle<CR>
 
+" use grip
+let vim_markdown_preview_github = 1
+let vim_markdown_preview_toggle = 2
+
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }
 
-noremap <C-w>d <Esc>:r !date +\%Y-\%m-\%d <CR>
+let g:today = strftime("%Y-%d-%d (%A)")
+let g:me = "xiaozongyang"
 
+func AddComment()
+    if &filetype == 'python'
+        call append(line("."), "    '''")
+        call append(line(".") + 1, "    '''")
+    endif
+
+    if &ft == 'c'
+        call append(line("."), "/*")
+        call append(line(".") + 1, "*/")
+    endif
+    call append(line(".") + 1, "    @description: ")
+    call append(line(".") + 2, "    @parameters: ")
+    call append(line(".") + 3, "    @return: ")
+    call append(line(".") + 4, "    @author: ".g:me)
+    call append(line(".") + 5, "    @created: ".g:today)
+    call append(line(".") + 6, "    @modified: ".g:today)
+endfunc
+
+" bind my shortcuts with prefix C-a
+" noremap <C-a>d <Esc>:r !date +\%Y-\%m-\%d <CR>
+map <C-a>d :call append(line("."), today) <CR>
+map <C-a>c :call AddComment() <CR>
+
+""""""""""""""""""""program templates"""""""""""""""""""
+"autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
+func HeadComment()
+    if &ft == 'python'
+        call append(0, "\#\!/usr/bin/env python")
+        call append(1, "\#-*-coding: utf8-*-")
+        call append(2, "\#vim:set enc=utf8:")
+        call append(3, "\#vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
+        let l:prefix = "# "
+        let l:start = 4
+    endif
+    call append(l:start, l:prefix."@description: ")
+    call append(l:start + 1, l:prefix."@author: ".g:me)
+    call append(l:start + 2, l:prefix."@created: ".g:today)
+    call append(l:start + 3, l:prefix."@modified: ".g:today)
+endfunc
+
+autocmd BufNewFile *.py call HeadComment()
