@@ -74,25 +74,25 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }
 
-let g:today = strftime("%Y-%d-%d (%A)")
+let g:today = strftime("%Y-%m-%d (%A)")
 let g:me = "xiaozongyang"
 
 func AddComment()
     if &filetype == 'python'
-        call append(line("."), "    '''")
-        call append(line(".") + 1, "    '''")
+        call append(line("."), "'''")
+        call append(line(".") + 1, "'''")
     endif
 
     if &ft == 'c'
         call append(line("."), "/*")
         call append(line(".") + 1, "*/")
     endif
-    call append(line(".") + 1, "    @description: ")
-    call append(line(".") + 2, "    @parameters: ")
-    call append(line(".") + 3, "    @return: ")
-    call append(line(".") + 4, "    @author: ".g:me)
-    call append(line(".") + 5, "    @created: ".g:today)
-    call append(line(".") + 6, "    @modified: ".g:today)
+    call append(line(".") + 1, "@description: ")
+    call append(line(".") + 2, "@parameters: ")
+    call append(line(".") + 3, "@return: ")
+    call append(line(".") + 4, "@author: ".g:me)
+    call append(line(".") + 5, "@created: ".g:today)
+    call append(line(".") + 6, "@modified: ".g:today)
 endfunc
 
 " bind my shortcuts with prefix C-a
@@ -111,10 +111,12 @@ func HeadComment()
         let l:prefix = "# "
         let l:start = 4
     endif
-    call append(l:start, l:prefix."@description: ")
-    call append(l:start + 1, l:prefix."@author: ".g:me)
-    call append(l:start + 2, l:prefix."@created: ".g:today)
-    call append(l:start + 3, l:prefix."@modified: ".g:today)
+    call append(l:start, l:prefix."'''")
+    call append(l:start + 1, l:prefix."@description: ")
+    call append(l:start + 2, l:prefix."@author: ".g:me)
+    call append(l:start + 3, l:prefix."@created: ".g:today)
+    call append(l:start + 4, l:prefix."@modified: ".g:today)
+    call append(l:start + 5, l:prefix."'''")
 endfunc
 
 autocmd BufNewFile *.py call HeadComment()
