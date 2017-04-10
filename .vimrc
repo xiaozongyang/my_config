@@ -53,7 +53,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
-Plug 'JamshedVesuna/vim-markdown-preview' " markdown preview tool
 call plug#end()
 
 
@@ -87,6 +86,9 @@ func AddComment()
         call append(line("."), "/*")
         call append(line(".") + 1, "*/")
     endif
+    if &ft == 'html'
+        call append(line("."), ["<!--", "-->"])
+    endif
     call append(line(".") + 1, "@description: ")
     call append(line(".") + 2, "@parameters: ")
     call append(line(".") + 3, "@return: ")
@@ -104,19 +106,32 @@ map <C-a>c :call AddComment() <CR>
 "autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
 func HeadComment()
     if &ft == 'python'
-        call append(0, "\#\!/usr/bin/env python")
-        call append(1, "\#-*-coding: utf8-*-")
-        call append(2, "\#vim:set enc=utf8:")
-        call append(3, "\#vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
+        call append(0, "\!/usr/bin/env python")
+        call append(1, "-*-coding: utf8-*-")
+        call append(2, "vim:set enc=utf8 fenc=utf8:")
+        call append(3, "vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
         let l:prefix = "# "
         let l:start = 4
+        let l:multi_beg = "'''"
+        let l:multi_end = "'''"
     endif
-    call append(l:start, l:prefix."'''")
+    if &ft == 'html'
+        call append(0, "<!DOCTYPE html>")
+        call append(1, ["<!--", "vim:set tw=100 ts=4 sts=4 sw=4 ai ci:","-->"])
+        call append(5, ["<html>", "</html>"])
+        call append(6, ["<head>", "</title>", "</title>", "</head>"])
+        call append(10, ["<body>", "</body>"])
+        let l:start = 4
+        let l:prefix = "    "
+        let l:multi_beg = "<!--"
+        let l:multi_end = "-->"
+    endif
+    call append(l:start, l:multi_beg)
+    call append(l:start + 1, l:multi_end)
     call append(l:start + 1, l:prefix."@description: ")
     call append(l:start + 2, l:prefix."@author: ".g:me)
     call append(l:start + 3, l:prefix."@created: ".g:today)
     call append(l:start + 4, l:prefix."@modified: ".g:today)
-    call append(l:start + 5, l:prefix."'''")
 endfunc
 
-autocmd BufNewFile *.py call HeadComment()
+autocmd BufNewFile *.py,*.html call HeadComment()
