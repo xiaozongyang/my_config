@@ -1,49 +1,32 @@
-""""""""""""" basic settings """""""""""""""""
-set nu " set number on
-set listchars=tab:->,trail:-,eol:$ " set list chars
-set list
-set expandtab
-set tw =100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
-set enc=utf8 fenc=utf8 ff=unix " set encoding, fileencoding, fileformat
-set sc smd " show command and mode
-set ls=2 " set lastline=2  show statusline
-set hls " set highlightsearch
-set t_Co=256 " export TERM=xterm-256color before
-highlight cursorline ctermbg=gray ctermfg=white
-
-set nocompatible               " be iMproved
-filetype off                   " required!
- 
-syntax on
-set backspace=indent,eol,start " enable backspace to delete
-filetype plugin indent on " auto-detect file type
-
-
 """"""""""""" tmux configs """""""""""""""""""
 " change cursor shape in tmux
 if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 " display background color in tmux
 if exists('$TMUX')
-  set term=screen-256color
+    set term=screen-256color
 endif
 
 function! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed' || a:info.force
-    !./install.py
-  endif
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status == 'installed' || a:info.force
+        !./install.py
+    endif
 endfunction
 
+""""" YCM configurations
+set completeopt-=preview " remove preview documents diplayed in splited tab
+let g:ycm_min_num_of_chars_for_completion = 1 " start matching begin first input character
+let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keywords
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -56,22 +39,9 @@ Plug 'noplans/lightline.vim'
 call plug#end()
 
 
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-"
-" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-" map ^T to toggle NERDTree
-map <C-t> :NERDTreeToggle<CR>
-
-" use grip
-let vim_markdown_preview_github = 1
-let vim_markdown_preview_toggle = 2
-
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ }
+            \ 'colorscheme': 'wombat',
+            \ }
 
 let g:today = strftime("%Y-%m-%d (%A)")
 let g:me = "xiaozongyang"
@@ -97,20 +67,16 @@ func AddComment()
     call append(line(".") + 6, "@modified: ".g:today)
 endfunc
 
-" bind my shortcuts with prefix C-a
-" noremap <C-a>d <Esc>:r !date +\%Y-\%m-\%d <CR>
-map <C-a>d :call append(line("."), today) <CR>
-map <C-a>c :call AddComment() <CR>
 
 """"""""""""""""""""program templates"""""""""""""""""""
 "autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
 func HeadComment()
     if &ft == 'python'
-        call append(0, "\!/usr/bin/env python")
-        call append(1, "-*-coding: utf8-*-")
-        call append(2, "vim:set enc=utf8 fenc=utf8:")
-        call append(3, "vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
-        let l:prefix = "# "
+        call append(0, "#\!/usr/bin/env python")
+        call append(1, "#-*-coding: utf-8-*-")
+        call append(2, "#vim:set enc=utf-8 fenc=utf-8:")
+        call append(3, "#vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
+        let l:prefix = ""
         let l:start = 4
         let l:multi_beg = "'''"
         let l:multi_end = "'''"
@@ -119,7 +85,7 @@ func HeadComment()
         call append(0, "<!DOCTYPE html>")
         call append(1, ["<!--", "vim:set tw=100 ts=4 sts=4 sw=4 ai ci:","-->"])
         call append(5, ["<html>", "</html>"])
-        call append(6, ["<head>", "</title>", "</title>", "</head>"])
+        call append(6, ["<head>", "<title>", "</title>", "</head>"])
         call append(10, ["<body>", "</body>"])
         let l:start = 4
         let l:prefix = "    "
@@ -134,4 +100,48 @@ func HeadComment()
     call append(l:start + 4, l:prefix."@modified: ".g:today)
 endfunc
 
-autocmd BufNewFile *.py,*.html call HeadComment()
+
+""""""""""""""""""" key maps """""""""""""""""""
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+"
+" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" map ^T to toggle NERDTree
+map <C-t> :NERDTreeToggle<CR>
+
+" bind my shortcuts with prefix C-a
+" noremap <C-a>d <Esc>:r !date +\%Y-\%m-\%d <CR>
+map <C-a>d :call append(line("."), today) <CR>
+map <C-a>c :call AddComment() <CR>
+
+""""""""""""" Event Listeners """""""""""""""""
+autocmd BufNewFile *.py,*.html call HeadComment() <CR>
+autocmd BufRead *.md set spell
+
+""""""""""""" basic settings """""""""""""""""
+set nu rnu" set number and relativenumber on
+set listchars=tab:>-,trail:-,eol:$,extends:>,precedes:<,nbsp:. " set list chars
+set list
+set expandtab
+set tw =100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
+set enc=utf8 fenc=utf8 ff=unix " set encoding, fileencoding, fileformat
+set ls=2 " set lastline=2  show statusline
+set hls " set highlightsearch
+set t_Co=256 " export TERM=xterm-256color before
+highlight cursorline ctermbg=gray ctermfg=white
+
+set nocompatible               " be iMproved
+filetype off                   " required!
+
+syntax on
+set backspace=indent,eol,start " enable backspace to delete
+filetype plugin indent on " auto-detect file type
+set sc smd " show command and mode
+set nowrap
+
+" set vim colorscheme to solarized-light
+syntax enable
+set bg=light
+colorscheme solarized
