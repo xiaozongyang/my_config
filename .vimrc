@@ -36,6 +36,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
+Plug 'tpope/vim-commentary'
 call plug#end()
 
 
@@ -142,25 +143,29 @@ set sc smd " show command and mode
 
 " set vim colorscheme to solarized-light
 syntax enable
-set bg=light
+set bg=dark
 colorscheme solarized
 
 func Lookup()
     let g:vim_dict_window_number = bufwinnr("vim-dict")
     "if the window with name `wim-dict` exists then go to it
-    let g:current_window_number = bufwinnr(expand("<cfile>"))
-    " generate lookup command with word under cursor
-    let l:cmd = "$r !ydcv " . expand("<cword>") 
 
+    let l:vim_dict_original_file_name = expand("%")
+    " generate lookup command with word under cursor
+    let l:cmd = "silent $r !ydcv " . expand("<cword>") 
+
+    " jump to `vim-dict` window if exists otherwise create it
     if g:vim_dict_window_number > 0
-        g:vim_dict_window_number wincmd w
-        g:current_window_number wincmd w
+        exec g:vim_dict_window_number." wincmd w"
     " otherwise create it
     else
         new vim-dict
-        exec cmd
-        wincmd j
     endif
+    exec cmd
+    " jump to orignal window
+    let l:vim_dict_original_window_number = bufwinnr(l:vim_dict_original_file_name)
+    exec l:vim_dict_original_window_number." wincmd w"
+
 endfunc
 
 "noremap <leader>l :!ydcv <C-r><C-w> <CR>
