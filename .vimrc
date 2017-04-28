@@ -139,9 +139,30 @@ syntax on
 set backspace=indent,eol,start " enable backspace to delete
 filetype plugin indent on " auto-detect file type
 set sc smd " show command and mode
-set nowrap
 
 " set vim colorscheme to solarized-light
 syntax enable
 set bg=light
 colorscheme solarized
+
+func Lookup()
+    let g:vim_dict_window_number = bufwinnr("vim-dict")
+    "if the window with name `wim-dict` exists then go to it
+    let g:current_window_number = bufwinnr(expand("<cfile>"))
+    " generate lookup command with word under cursor
+    let l:cmd = "$r !ydcv " . expand("<cword>") 
+
+    if g:vim_dict_window_number > 0
+        g:vim_dict_window_number wincmd w
+        g:current_window_number wincmd w
+    " otherwise create it
+    else
+        new vim-dict
+        exec cmd
+        wincmd j
+    endif
+endfunc
+
+"noremap <leader>l :!ydcv <C-r><C-w> <CR>
+noremap <leader>l :call Lookup() <CR>
+noremap <leader>r :%s/\<<C-r><C-w>\>/
