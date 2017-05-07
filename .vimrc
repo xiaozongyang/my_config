@@ -13,15 +13,6 @@ if exists('$TMUX')
     set term=screen-256color
 endif
 
-function! BuildYCM(info)
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status == 'installed' || a:info.force
-        !./install.py
-    endif
-endfunction
 
 """"" YCM configurations
 set completeopt-=preview " remove preview documents diplayed in splited tab
@@ -31,7 +22,6 @@ let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keyw
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'Valloric/YouCompleteMe', {'do': function('BuildYCM')}
 Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
@@ -46,7 +36,7 @@ let g:lightline = {
 let g:today = strftime("%Y-%m-%d (%A)")
 let g:me = "xiaozongyang"
 
-func AddComment()
+func! AddComment()
     if &filetype == 'python'
         call append(line("."), "'''")
         call append(line(".") + 1, "'''")
@@ -70,7 +60,7 @@ endfunc
 
 """"""""""""""""""""program templates"""""""""""""""""""
 "autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
-func HeadComment()
+func! HeadComment()
     if &ft == 'python'
         call append(0, "#\!/usr/bin/env python")
         call append(1, "#-*-coding: utf-8-*-")
@@ -142,8 +132,10 @@ set sc smd " show command and mode
 
 " set vim colorscheme to solarized-light
 syntax enable
-set bg=light
 colorscheme solarized
+set bg=light
+" change hilight search color
+hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
 func Lookup()
     let g:vim_dict_window_number = bufwinnr("vim-dict")
