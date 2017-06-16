@@ -11,3 +11,8 @@ source ~/.zshrc
 # install vim-plug plugin manager
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+if [ -d ~/.vim/templates ]; then
+    mv ~/.vim/templates ~/.vim/templates.bak
+fi
+ln -s ~/.my_config/vim_templates ~/.vim/templates
