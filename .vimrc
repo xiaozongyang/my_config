@@ -18,6 +18,10 @@ endif
 set completeopt-=preview " remove preview documents diplayed in splited tab
 let g:ycm_min_num_of_chars_for_completion = 1 " start matching begin first input character
 let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keywords
+if !exists("g:ycm_semantic_triggers")
+    let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers['typescript'] = ['.']
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -27,6 +31,9 @@ Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
+Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 
@@ -36,61 +43,47 @@ let g:lightline = {
 
 let g:today = strftime("%Y-%m-%d (%A)")
 let g:me = "xiaozongyang"
+let g:tpl_dir = "~/.vim/templates/"
 
 func! AddComment()
-    if &filetype == 'python'
-        call append(line("."), "'''")
-        call append(line(".") + 1, "'''")
-    endif
-
-    if &ft == 'c'
-        call append(line("."), "/*")
-        call append(line(".") + 1, "*/")
-    endif
-    if &ft == 'html'
-        call append(line("."), ["<!--", "-->"])
-    endif
-    call append(line(".") + 1, "@description: ")
-    call append(line(".") + 2, "@parameters: ")
-    call append(line(".") + 3, "@return: ")
-    call append(line(".") + 4, "@author: ".g:me)
-    call append(line(".") + 5, "@created: ".g:today)
-    call append(line(".") + 6, "@modified: ".g:today)
+    let l:tpl_name = expand('%:e').'-comment.tpl'
+    call InsertTemplate(l:tpl_name)
+    call MySubstitute('<AUTHOR>', g:me, 'g')
+    call MySubstitute('<TODAY>', g:today, 'g')
+    "if &ft == 'python':
+    "    call InsertTemplate('python-comment.tpl')
+    "    call MySubstitute('<AUTHOR>', g:me, 'g')
+    "    call MySubstitute('<TODAY>', g:today, 'g')
+    "endif
+    "if &ft == 'c'
+    "    call InsertTemplate('c-comment.tpl')
+    "    call MySubstitute('<AUTHOR>', g:me, 'g')
+    "    call MySubstitute('<TODAY>', g:today, 'g')
+    "endif
+    "if &ft == 'html'
+    "    call InsertTemplate('html-comment.tpl')
+    "    call MySubstitute('<AUTHOR>', g:me, 'g')
+    "    call MySubstitute('<TODAY>', g:today, 'g')
+    "endif
 endfunc
 
+func InsertTemplate(tpl_name)
+    exec '0r '.g:tpl_dir.a:tpl_name
+endfunc
 
 """"""""""""""""""""program templates"""""""""""""""""""
-"autocmd BufNewFile *.py 0r ~/.vim/template/py.tpl
-func! HeadComment()
-    if &ft == 'python'
-        call append(0, "#\!/usr/bin/env python")
-        call append(1, "#-*-coding: utf-8-*-")
-        call append(2, "#vim:set enc=utf-8 fenc=utf-8:")
-        call append(3, "#vim:set tw=100 ts=4 sts=4 sw=4 ai ci:")
-        let l:prefix = ""
-        let l:start = 4
-        let l:multi_beg = "'''"
-        let l:multi_end = "'''"
-    endif
-    if &ft == 'html'
-        call append(0, "<!DOCTYPE html>")
-        call append(1, ["<!--", "vim:set tw=100 ts=4 sts=4 sw=4 ai ci:","-->"])
-        call append(5, ["<html>", "</html>"])
-        call append(6, ["<head>", "<title>", "</title>", "</head>"])
-        call append(10, ["<body>", "</body>"])
-        let l:start = 4
-        let l:prefix = "    "
-        let l:multi_beg = "<!--"
-        let l:multi_end = "-->"
-    endif
-    call append(l:start, l:multi_beg)
-    call append(l:start + 1, l:multi_end)
-    call append(l:start + 1, l:prefix."@description: ")
-    call append(l:start + 2, l:prefix."@author: ".g:me)
-    call append(l:start + 3, l:prefix."@created: ".g:today)
-    call append(l:start + 4, l:prefix."@modified: ".g:today)
+func OnNewPython()
+    call InsertTemplate('py.tpl')
+    call MySubstitute('<AUTHOR>', g:me, 'g')
+    call MySubstitute('<TODAY>', g:today, 'g')
 endfunc
 
+func OnNewHtml()
+    call InsertTemplate('html.tpl')
+    call MySubstitute('<AUTHOR>', g:me, 'g')
+    call MySubstitute('<TODAY>', g:today, 'g')
+    set ts=2 sts=2 sw=2
+endfunc
 
 """"""""""""""""""" key maps """""""""""""""""""
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -107,9 +100,6 @@ map <C-t> :NERDTreeToggle<CR>
 map <C-a>d :call append(line("."), today) <CR>
 map <C-a>c :call AddComment() <CR>
 
-""""""""""""" Event Listeners """""""""""""""""
-autocmd BufNewFile *.py,*.html call HeadComment() <CR>
-autocmd BufRead *.md set spell
 
 """"""""""""" basic settings """""""""""""""""
 set nu rnu" set number and relativenumber on
@@ -133,12 +123,8 @@ set sc smd " show command and mode
 
 " set vim colorscheme to solarized-light
 syntax enable
-<<<<<<< HEAD
-=======
-set bg=dark
->>>>>>> 904d7fe60ce35e2bd1291c37540f3cf35ed2098a
 colorscheme solarized
-set bg=light
+set bg=dark
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
@@ -164,6 +150,29 @@ func Lookup()
 
 endfunc
 
-"noremap <leader>l :!ydcv <C-r><C-w> <CR>
+func GenerateMakefileOfTex()
+    let l:out = expand('%:r').('.pdf')
+    new Makefile
+    exec '0r '.g:tpl_dir.'tex-makefile.tpl'
+    call MySubstitute('<OUT>', l:out, '')
+    wq
+endfunc
+
+func MySubstitute(pat, expr, flags)
+    exec '%s/'.a:pat.'/'.a:expr.'/'.a:flags
+endfunc
+
+function OnNewTex()
+    exec '0r '.g:tpl_dir.'tex.tpl'
+    call MySubstitute('<AUTHOR>', g:me, '')
+    call GenerateMakefileOfTex()
+endfunc
+
+""""""""""""" Event Listeners """""""""""""""""
+autocmd BufNewFile *.py call OnNewPython()
+autocmd BufNewFIle *.html call OnNewHtml()
+autocmd BufNewFile *.tex call OnNewTex()
+autocmd BufRead *.md set spell tw=1000
+
 noremap <leader>l :call Lookup() <CR>
 noremap <leader>r :%s/\<<C-r><C-w>\>/
