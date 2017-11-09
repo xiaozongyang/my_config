@@ -2,7 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/xiaozy/.oh-my-zsh
+#export ZSH=/home/xiaozy/.oh-my-zsh
+export ZSH=/usr/share/oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -17,7 +18,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -107,14 +108,17 @@ export PATH="$PATH:~/.go"
 export MEDIA_HOME="/run/media/xiaozy/"
 export PAGER="vimpager"
 export LANG=en_US.UTF-8
+export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
+export HADOOP_HOME=/home/xiaozongyang/Code/data-govern/hadoop-2.8.2
 
 ########## custom alias ##############
 alias vi="vim"
 alias ptpython="ptpython --vi"
-alias npm="cnpm"
 alias gs="git status"
 alias tailf="tail -f"
 alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
+alias git="hub"
+
 
 function pkg_rm_orphan(){
     echo "rmove orphan packages"
@@ -138,3 +142,17 @@ function ls_noext(){
     ls -1 "$@" | awk -F '.' '{print $1}'
 }
 
+function connect_remote_desktop(){
+    rdesktop -g 1920x1000 -P -z -u jiaohuan 10.109.246.16 2>&1 >/dev/null &
+}
+
+function du_vpn(){
+    sudo openconnect -u xiaozongyang --authgroup=RSA vpn.baidu.com 2>/dev/null
+}
+
+function mv2ngix(){
+    nginx_dir=/usr/share/nginx/html
+    for f in $@; do
+        mv $f $nginx_dir
+    done
+}

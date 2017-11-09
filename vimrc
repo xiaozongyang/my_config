@@ -173,6 +173,11 @@ autocmd BufNewFile *.py call OnNewPython()
 autocmd BufNewFIle *.html call OnNewHtml()
 autocmd BufNewFile *.tex call OnNewTex()
 autocmd BufRead *.md set spell tw=1000
+autocmd BufRead *.xml,*.html set ts=2 sts=2 sw=2
 
 noremap <leader>l :call Lookup() <CR>
-noremap <leader>r :%s/\<<C-r><C-w>\>/
+" replace current word
+noremap <leader>r :%s/\<<C-r><C-w>\>
+" search selected text as exact text
+vnoremap // y/\V<C-R>"<CR>
+
