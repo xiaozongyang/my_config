@@ -104,12 +104,15 @@ export XIM_PROGRAM=fcitx
 export SSH_AUTH_SOCK=/tmp/ssh-HzyUYoAm5g6f/agent.6068
 export SSH_AGENT_PID=SSH_AGENT_PID=6069
 export CEPH_DEPLOY_REPO_URL=http://mirrors.ustc.edu.cn/ceph
-export PATH="$PATH:~/.go"
+export PATH="${HOME}/.local/bin:${PATH}"
 export MEDIA_HOME="/run/media/xiaozy/"
 export PAGER="vimpager"
 export LANG=en_US.UTF-8
 export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
-export HADOOP_HOME=/home/xiaozongyang/Code/data-govern/hadoop-2.8.2
+
+### Wine Envs ###
+export WINEARCH=win32
+export WINEPREFIX=~/.deepinwine
 
 ########## custom alias ##############
 alias vi="vim"
@@ -118,6 +121,9 @@ alias gs="git status"
 alias tailf="tail -f"
 alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
 alias git="hub"
+#alias python=$(which python3.6)
+alias pydb2="python2 -m pdb"
+alias pydb3="python3 -m pdb"
 
 
 function pkg_rm_orphan(){
@@ -153,6 +159,40 @@ function du_vpn(){
 function mv2ngix(){
     nginx_dir=/usr/share/nginx/html
     for f in $@; do
-        mv $f $nginx_dir
+        sudo mv $f $nginx_dir
     done
 }
+
+## auto-start X at login
+#if [ -z "${DISPLAY}" ] \
+#    && [ -n "${XDG_VTNR}" ] \
+#    && [ "${XDG_VTNR}" -eq 1 ]
+#then
+#    exec startx
+#fi
+#
+# auto-play music at login
+#
+
+function play_music(){
+    _MUSIC_PID="$(ps -ef | grep mplayer | grep music-playlist | sed '/grep/d'| awk '{print $2}')"
+    if [ -z "${_MUSIC_PID}" ]; then
+        nohup mplayer -playlist ~/Music/music-playlist -vo null &
+    fi
+}
+
+function stop_music(){
+    if [ -n ${_MUSIC_PID} ]; then
+        kill -9 ${_MUSIC_PID}
+        unset _MUSIC_PID
+    fi
+
+}
+
+#play_music
+#
+
+## auto start xscreensaver
+#if [ -z "$(pgrep gnome-screensav)" ]; then
+#    gnome-screensaver & disown
+#fi

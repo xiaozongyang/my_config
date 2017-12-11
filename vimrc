@@ -108,6 +108,7 @@ set list
 set expandtab
 set tw =100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
 set enc=utf8 fenc=utf8 ff=unix " set encoding, fileencoding, fileformat
+set fencs=utf8,cp936,cp18030,big5,latin1
 set ls=2 " set lastline=2  show statusline
 set hls " set highlightsearch
 set t_Co=256 " export TERM=xterm-256color before
@@ -169,11 +170,17 @@ function OnNewTex()
 endfunc
 
 """"""""""""" Event Listeners """""""""""""""""
-autocmd BufNewFile *.py call OnNewPython()
-autocmd BufNewFIle *.html call OnNewHtml()
-autocmd BufNewFile *.tex call OnNewTex()
-autocmd BufRead *.md set spell tw=1000
-autocmd BufRead *.xml,*.html set ts=2 sts=2 sw=2
+au BufNewFile *.py call OnNewPython()
+au BufNewFIle *.html call OnNewHtml()
+au BufNewFile *.tex call OnNewTex()
+au BufRead *.md set spell tw=1000
+au BufRead *.xml,*.html set ts=2 sts=2 sw=2
+au BufRead * :loadview
+au BufWrite * :mkview
+augroup vimrc
+    au BufRead * setlocal fdm=indent
+    au BufWinEnter * if &fdm == 'indent' | setlocal fdm=manual | endif
+augroup END
 
 noremap <leader>l :call Lookup() <CR>
 " replace current word
@@ -181,3 +188,5 @@ noremap <leader>r :%s/\<<C-r><C-w>\>
 " search selected text as exact text
 vnoremap // y/\V<C-R>"<CR>
 
+command DiffOrig vert new | se bt=nofile | r ++edit #
+    \ | 0d_ | diffthis | wincmd p | diffthis

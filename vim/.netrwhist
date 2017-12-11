@@ -1,9 +1,4 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/xiaozongyang/.config/ibus/rime'
-let g:netrw_dirhist_2='/home/xiaozongyang/Code/challenger-ai/data/ai_challenger_translation_train_20170912'
-let g:netrw_dirhist_3='/etc/shadowsocks'
-let g:netrw_dirhist_4='/home/xiaozongyang/Code/atlas/apache-atlas-0.8.1/logs'
-let g:netrw_dirhist_5='/home/xiaozongyang/Code/data-govern/atlas/apache-atlas-0.8.1-berkely/hook/sqoop'
-let g:netrw_dirhist_6='/home/xiaozongyang/Code/data-govern/hive/${system:java.io.tmpdir}'
-let g:netrw_dirhist_7='/home/xiaozongyang/Code/data-govern/hadoop/etc'
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf/hadoop-conf'
+let g:netrw_dirhist_2='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf'
