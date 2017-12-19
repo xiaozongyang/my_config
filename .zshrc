@@ -89,18 +89,6 @@ source $ZSH/oh-my-zsh.sh
 export TOMCAT_HOME="/usr/share/tomcat8"
 export LC_CTYPE=zh_CN.UTF-8
 export VISUAL="vim"
-export GTK_IM_MODULE=ibus
-########### use ibus as input source #############
-# export XMODIFIERS=@im=ibus
-# export QT_IM_MODULE=ibus
-# export XIM=ibus
-# export XIM_PROGRAM=ibus
-########### use fcitx as input source ############
-export GTK_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export QT_IM_MODULE=fcitx
-export XIM=fcitx
-export XIM_PROGRAM=fcitx
 export SSH_AUTH_SOCK=/tmp/ssh-HzyUYoAm5g6f/agent.6068
 export SSH_AGENT_PID=SSH_AGENT_PID=6069
 export CEPH_DEPLOY_REPO_URL=http://mirrors.ustc.edu.cn/ceph
@@ -149,11 +137,8 @@ function ls_noext(){
 }
 
 function connect_remote_desktop(){
-    rdesktop -g 1920x1000 -P -z -u jiaohuan 10.109.246.16 2>&1 >/dev/null &
-}
-
-function du_vpn(){
-    sudo openconnect -u xiaozongyang --authgroup=RSA vpn.baidu.com 2>/dev/null
+    local _REMOTE_IP=10.109.246.16
+    rdesktop -g 1920x1000 -P -z -u jiaohuan  2>&1 >/dev/null &
 }
 
 function mv2ngix(){
@@ -164,12 +149,12 @@ function mv2ngix(){
 }
 
 ## auto-start X at login
-#if [ -z "${DISPLAY}" ] \
-#    && [ -n "${XDG_VTNR}" ] \
-#    && [ "${XDG_VTNR}" -eq 1 ]
-#then
-#    exec startx
-#fi
+if [ -z "${DISPLAY}" ] \
+    && [ -n "${XDG_VTNR}" ] \
+    && [ "${XDG_VTNR}" -eq 1 ]
+then
+    exec startx
+fi
 #
 # auto-play music at login
 #
@@ -193,6 +178,47 @@ function stop_music(){
 #
 
 ## auto start xscreensaver
-#if [ -z "$(pgrep gnome-screensav)" ]; then
-#    gnome-screensaver & disown
-#fi
+if [ -z "$(pgrep gnome-screensav)" ]; then
+    gnome-screensaver & disown
+fi
+
+function load_im_fcitx(){
+    ########### use fcitx as input source ############
+    export GTK_IM_MODULE=fcitx
+    export XMODIFIERS=@im=fcitx
+    export QT_IM_MODULE=fcitx
+    export XIM=fcitx
+    export XIM_PROGRAM=fcitx
+}
+
+function load_im_ibus(){
+    ########### use ibus as input source #############
+    export XMODIFIERS=@im=ibus
+    export QT_IM_MODULE=ibus
+    export XIM=ibus
+    export XIM_PROGRAM=ibus
+}
+
+load_im_ibus
+
+function venv2_init(){
+    local VENV_DIR=${1:=.venv2}
+    virtualenv ${VENV_DIR} -p $(which python2) --no-site-packages
+    source ${VENV_DIR}/bin/activate
+}
+
+function venv3_init(){
+    local VENV_DIR=${1:=.venv3}
+    virtualenv ${VENV_DIR} -p $(which python2) --no-site-packages
+    source ${VENV_DIR}/bin/activate
+}
+
+function venv2_activate(){
+    local ACTIVATE_SCRIPT=${1:=.venv2/bin/activate}
+    source ${ACTIVATE_SCRIPT}
+}
+
+function venv3_activate(){
+    local ACTIVATE_SCRIPT=${1:=.venv3/bin/activate}
+    source ${ACTIVATE_SCRIPT}
+}

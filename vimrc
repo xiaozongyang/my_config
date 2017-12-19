@@ -112,6 +112,7 @@ set fencs=utf8,cp936,cp18030,big5,latin1
 set ls=2 " set lastline=2  show statusline
 set hls " set highlightsearch
 set t_Co=256 " export TERM=xterm-256color before
+set et
 highlight cursorline ctermbg=gray ctermfg=white
 
 set nocompatible               " be iMproved
