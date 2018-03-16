@@ -171,13 +171,15 @@ function OnNewTex()
 endfunc
 
 function OnNewC()
-    noremap <leader>c :!gcc % -o %:r -g -Wall
-    noremap <leader>e :!./%:r
+    noremap <leader>c :!gcc % -o %:r -g -Wall <CR>
+    noremap <leader>e :!./%:r <CR>
+    noremap <leader>d :!gdb %:r <CR>
 endfunc
 
 function OnNewCpp()
-    noremap <leader>c :!g++ % -o %:r -g -Wall
-    noremap <leader>e :!./%:r
+    noremap <leader>c :!g++ % -o %:r -g -Wall <CR>
+    noremap <leader>e :!./%:r <CR>
+    noremap <leader>d :!gdb %:r <CR>
 endfunc
 
 
@@ -189,8 +191,10 @@ au BufRead *.md set spell tw=1000
 au BufRead *.xml,*.html set ts=2 sts=2 sw=2
 au BufRead * :loadview
 au BufWrite * :mkview
-au BufRead *.c noremap call OnNewC()
-au BufRead *.cc,*.cpp noremap call OnNewCpp()
+au BufNewFile *.c call OnNewC()
+au BufNewFile *.cc,*.cpp call OnNewCpp()
+au BufRead *.c call OnNewC()
+au BufRead *.cc,*.cpp call OnNewCpp()
 
 augroup vimrc
     au BufRead * setlocal fdm=indent
