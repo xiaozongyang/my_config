@@ -1,4 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_cnt =5
 let g:netrw_dirhist_1='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf/hadoop-conf'
 let g:netrw_dirhist_2='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf'
+let g:netrw_dirhist_3='/home/xiaozongyang/.config/pip/pip.conf'
+let g:netrw_dirhist_4='/home/xiaozongyang/Code/java/streamlio/incubator-pulsar/pulsar-broker-common'
+let g:netrw_dirhist_5='/home/xiaozongyang/code/java/incubator-pulsar/pulsar-client-cpp/build-support'

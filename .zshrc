@@ -92,11 +92,14 @@ export VISUAL="vim"
 export SSH_AUTH_SOCK=/tmp/ssh-HzyUYoAm5g6f/agent.6068
 export SSH_AGENT_PID=SSH_AGENT_PID=6069
 export CEPH_DEPLOY_REPO_URL=http://mirrors.ustc.edu.cn/ceph
-export PATH="${HOME}/.local/bin:${PATH}"
+export USER_PATH="${HOME}/.local/bin:${HOME}/.gem/ruby/2.5.0/bin"
+export PATH="${USER_PATH}:${PATH}"
 export MEDIA_HOME="/run/media/xiaozy/"
 export PAGER="vimpager"
 export LANG=en_US.UTF-8
 export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
+export JAVA_HOME=/usr/lib/jvm/default
+export MAVEN_OPTS="-Xmx1024m"
 
 ### Wine Envs ###
 export WINEARCH=win32
@@ -107,7 +110,7 @@ alias vi="vim"
 alias ptpython="ptpython --vi"
 alias gs="git status"
 alias tailf="tail -f"
-alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
+#alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
 alias git="hub"
 #alias python=$(which python3.6)
 alias pydb2="python2 -m pdb"
@@ -148,13 +151,6 @@ function mv2ngix(){
     done
 }
 
-## auto-start X at login
-if [ -z "${DISPLAY}" ] \
-    && [ -n "${XDG_VTNR}" ] \
-    && [ "${XDG_VTNR}" -eq 1 ]
-then
-    exec startx
-fi
 #
 # auto-play music at login
 #
@@ -178,9 +174,11 @@ function stop_music(){
 #
 
 ## auto start xscreensaver
-if [ -z "$(pgrep gnome-screensav)" ]; then
-    gnome-screensaver & disown
-fi
+function screensaver_daemon(){
+    if [ -z "$(pgrep gnome-screensav)" ]; then
+        gnome-screensaver & disown
+    fi
+}
 
 function load_im_fcitx(){
     ########### use fcitx as input source ############
@@ -199,7 +197,22 @@ function load_im_ibus(){
     export XIM_PROGRAM=ibus
 }
 
-load_im_ibus
+## gdm will load ibus
+# load_im_ibus
+# screensaver_daemon
+function use_gdm(){
+    if [ ! -z $(pgrep gdm) ]; then
+        screensaver_daemon
+        load_im_ibus
+        ## auto-start X at login
+        if [ -z "${DISPLAY}" ] \
+            && [ -n "${XDG_VTNR}" ] \
+            && [ "${XDG_VTNR}" -eq 1 ]
+        then
+            exec startx
+        fi
+    fi
+}
 
 function venv2_init(){
     local VENV_DIR=${1:=.venv2}
@@ -209,7 +222,7 @@ function venv2_init(){
 
 function venv3_init(){
     local VENV_DIR=${1:=.venv3}
-    virtualenv ${VENV_DIR} -p $(which python2) --no-site-packages
+    virtualenv ${VENV_DIR} -p $(which python3) --no-site-packages
     source ${VENV_DIR}/bin/activate
 }
 
@@ -221,4 +234,10 @@ function venv2_activate(){
 function venv3_activate(){
     local ACTIVATE_SCRIPT=${1:=.venv3/bin/activate}
     source ${ACTIVATE_SCRIPT}
+}
+
+#use_gdm
+
+function war3(){
+    sudo wine /mnt/d/Warcraft\ III\ Frozen\ Throne/Warcraft\ III\ Frozen\ Throne/Frozen\ Throne.exe 2>&1 >/dev/null
 }

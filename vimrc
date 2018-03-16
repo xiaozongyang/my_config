@@ -33,7 +33,6 @@ Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 
@@ -76,6 +75,7 @@ func OnNewPython()
     call InsertTemplate('py.tpl')
     call MySubstitute('<AUTHOR>', g:me, 'g')
     call MySubstitute('<TODAY>', g:today, 'g')
+    noremap <leader>e python %
 endfunc
 
 func OnNewHtml()
@@ -125,7 +125,7 @@ set sc smd " show command and mode
 
 " set vim colorscheme to solarized-light
 syntax enable
-colorscheme solarized
+"colorscheme solarized
 set bg=dark
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
@@ -170,6 +170,17 @@ function OnNewTex()
     call GenerateMakefileOfTex()
 endfunc
 
+function OnNewC()
+    noremap <leader>c :!gcc % -o %:r -g -Wall
+    noremap <leader>e :!./%:r
+endfunc
+
+function OnNewCpp()
+    noremap <leader>c :!g++ % -o %:r -g -Wall
+    noremap <leader>e :!./%:r
+endfunc
+
+
 """"""""""""" Event Listeners """""""""""""""""
 au BufNewFile *.py call OnNewPython()
 au BufNewFIle *.html call OnNewHtml()
@@ -178,6 +189,9 @@ au BufRead *.md set spell tw=1000
 au BufRead *.xml,*.html set ts=2 sts=2 sw=2
 au BufRead * :loadview
 au BufWrite * :mkview
+au BufRead *.c noremap call OnNewC()
+au BufRead *.cc,*.cpp noremap call OnNewCpp()
+
 augroup vimrc
     au BufRead * setlocal fdm=indent
     au BufWinEnter * if &fdm == 'indent' | setlocal fdm=manual | endif
