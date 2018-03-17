@@ -177,7 +177,7 @@ function OnNewC()
 endfunc
 
 function OnNewCpp()
-    noremap <leader>c :!g++ % -o %:r -g -Wall <CR>
+    noremap <leader>c :!g++ % -o %:r -g -Wall -std=c++11<CR>
     noremap <leader>e :!./%:r <CR>
     noremap <leader>d :!gdb %:r <CR>
 endfunc
