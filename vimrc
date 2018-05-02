@@ -188,7 +188,7 @@ au BufNewFile *.py call OnNewPython()
 au BufNewFIle *.html call OnNewHtml()
 au BufNewFile *.tex call OnNewTex()
 au BufRead *.md set spell tw=1000
-au BufRead *.xml,*.html set ts=2 sts=2 sw=2
+au BufRead *.html set ts=2 sts=2 sw=2
 au BufRead * :loadview
 au BufWrite * :mkview
 au BufNewFile *.c call OnNewC()
@@ -204,6 +204,8 @@ augroup END
 noremap <leader>l :call Lookup() <CR>
 " replace current word
 noremap <leader>r :%s/\<<C-r><C-w>\>
+" remove trailing spaces
+noremap <leader>t :%s/\s\+$// <CR>
 " search selected text as exact text
 vnoremap // y/\V<C-R>"<CR>
 

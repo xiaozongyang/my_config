@@ -1,7 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf/hadoop-conf'
 let g:netrw_dirhist_2='/home/xiaozongyang/Code/data-govern/oozie-4.3.0-falcon/conf'
 let g:netrw_dirhist_3='/home/xiaozongyang/.config/pip/pip.conf'
 let g:netrw_dirhist_4='/home/xiaozongyang/Code/java/streamlio/incubator-pulsar/pulsar-broker-common'
 let g:netrw_dirhist_5='/home/xiaozongyang/code/java/incubator-pulsar/pulsar-client-cpp/build-support'
+let g:netrw_dirhist_6='/Users/xiaozongyang/code/live-rs-engine/live-rs-engine-plugin-liveepisode'
+let g:netrw_dirhist_7='/Users/xiaozongyang/code/tutor-live-server-common/src/main/resources'
+let g:netrw_dirhist_8='/Users/xiaozongyang/code/tutor-live-server-common/src/main/resources/proto'
+let g:netrw_dirhist_9='/Users/xiaozongyang/code/live-rs-engine-bak/live-rs-engine-plugin-userlist'
