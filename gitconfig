@@ -1,0 +1,31 @@
+[user]
+    name = xiaozy
+    email = xiaozy@fenbi.com
+[color]
+    ui = true
+    diff = true
+    status = true
+    branch = true
+    interactive = true
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    dc = diff --cached
+    lg = log -p
+    who = shortlog -s --
+    ll = log --decorate --graph --all
+    pl = pull origin master
+    lc = diff --name--status --diff-filter=U
+    mb = merge --no--ff --log
+
+    stash-untracked = "!f() {    \
+        git stash;               \
+        git stash -u;            \
+        git stash pop stash@{1}; \
+    }; f"
+
+[core]
+    excludesfile = ~/.config/git/git-ignore-global

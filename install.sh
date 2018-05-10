@@ -1,18 +1,53 @@
 #!/usr/bin/bash
+CURDIR=`cd $(dirname $0) && pwd`
 
-# clone oh-my-zsh and change shell to zsh
-cd ~ && sh -c "$(curl -fsSL \
-    https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-# replace original .zshrc with mine and reload it
-mv ~/.zshrc ~/.zshrc.bak
-ln -s .zshrc ~/.zshrc
-source ~/.zshrc
+# backup [file]
+function backup() {
+    if [ -f $1 ]; then
+        mv "$1" "$1-bak"
+    fi
+}
 
-# install vim-plug plugin manager
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# link [from] [to]
+function link() {
+    if [ -z $2 ]; then
+        return 1
+    fi
+    ln -s $1 $2
+}
 
-if [ -d ~/.vim/templates ]; then
-    mv ~/.vim/templates ~/.vim/templates.bak
+# backup existing configuration and link new
+function install() {
+    backup ~/.vimrc
+    backup ~/.tmux.conf
+    backup ~/.gitconfig
+
+    mkdir -p ~/.config/git
+
+    link vimrc ~/.vimrc
+    link vim ~/.vim
+    link tmux.conf ~/.tmux.conf
+    link gitconfig ~/.gitconfig
+    link git-ignore-gloabl ~/.config/git/git-ignore-global
+}
+
+# restore to original configuration
+function uninstall() {
+    rm ~/.vimrc ~/.tmux.conf ~/.gitconfig
+    mv ~/.vimrc-bak ~/.vimrc
+    mv ~/.tmux.conf-bak ~/.tmux.conf
+    mv ~/.gitconfig-bak ~/.gitconfig
+}
+
+# print help message
+function print_help_message() {
+    echo "usage: 'sh install.sh install|uninstall'"
+}
+
+cmd=${1:-install}
+
+if [ ${cmd} != "install" ] || [ ${cmd} != "uninstall" ]; then
+    ${cmd}
+else
+    print_help_message
 fi
-ln -s ~/.my_config/vim_templates ~/.vim/templates
