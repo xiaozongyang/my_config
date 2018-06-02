@@ -27,5 +27,13 @@
         git stash pop stash@{1}; \
     }; f"
 
+    undo = "!f() {              \
+        git reset -- $1;        \
+        git co -- $1;           \
+    }; f"
+
 [core]
     excludesfile = ~/.config/git/git-ignore-global
+    editor = vim
+[merge]
+    tool = vimdiff

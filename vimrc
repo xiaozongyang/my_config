@@ -26,7 +26,9 @@ let g:ycm_semantic_triggers['typescript'] = ['.']
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'junegunn/fzf.vim'
+Plug 'Shougo/unite.vim'
+Plug 'xolox/vim-notes'
+Plug 'xolox/vim-misc'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
@@ -189,6 +191,7 @@ au BufNewFIle *.html call OnNewHtml()
 au BufNewFile *.tex call OnNewTex()
 au BufRead *.md set spell tw=1000
 au BufRead *.html set ts=2 sts=2 sw=2
+au BufRead *.xml set cuc
 au BufRead * :loadview
 au BufWrite * :mkview
 au BufNewFile *.c call OnNewC()
@@ -211,3 +214,6 @@ vnoremap // y/\V<C-R>"<CR>
 
 command DiffOrig vert new | se bt=nofile | r ++edit #
     \ | 0d_ | diffthis | wincmd p | diffthis
+
+" notes
+let g:notes_directories = ['~/Documents/Notes']
