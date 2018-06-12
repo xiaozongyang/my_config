@@ -32,6 +32,14 @@
         git co -- $1;           \
     }; f"
 
+    ls-match = "!f() {          \
+        git ls-files "*$1*";    \
+    }; f"
+
+    df-match = "!f() {          \
+        git df -- "*$1*";       \
+    }; f"
+
 [core]
     excludesfile = ~/.config/git/git-ignore-global
     editor = vim
