@@ -40,6 +40,11 @@
         git df -- "*$1*";       \
     }; f"
 
+    discard-changes = "!f() {   \
+        git stash;              \
+        git stash drop;         \
+    }; f"
+
 [core]
     excludesfile = ~/.config/git/git-ignore-global
     editor = vim
