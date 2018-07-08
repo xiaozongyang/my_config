@@ -27,6 +27,8 @@ let g:ycm_semantic_triggers['typescript'] = ['.']
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
 Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'xolox/vim-notes'
 Plug 'xolox/vim-misc'
 Plug 'w0rp/ale'
@@ -198,6 +200,7 @@ au BufNewFile *.c call OnNewC()
 au BufNewFile *.cc,*.cpp call OnNewCpp()
 au BufRead *.c call OnNewC()
 au BufRead *.cc,*.cpp call OnNewCpp()
+au FileType nerdtree se nu rnu
 
 augroup vimrc
     au BufRead * setlocal fdm=indent
