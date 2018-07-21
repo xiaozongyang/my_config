@@ -1,0 +1,70 @@
+_DIR=`cd $(dirname $0) && pwd`
+case $OSTYPE in
+    "linux-gnu"*)
+        source $_DIR/linux-functions
+        _OS="linux"
+    ;;
+    "darwin"*)
+        source $_DIR/osx-functions
+        _OS="osx"
+    ;;
+esac
+
+function _os_type() {
+    echo $_OS
+}
+
+function _installed() {
+    which "$1" 2>&1 >/dev/null
+}
+
+function venv2_init(){
+    local VENV_DIR=${1:=.venv2}
+    virtualenv ${VENV_DIR} -p $(which python2) --no-site-packages
+    source ${VENV_DIR}/bin/activate
+}
+
+function venv3_init(){
+    local VENV_DIR=${1:=.venv3}
+    virtualenv ${VENV_DIR} -p $(which python3) --no-site-packages
+    source ${VENV_DIR}/bin/activate
+}
+
+function venv2_activate(){
+    local ACTIVATE_SCRIPT=${1:=.venv2/bin/activate}
+    source ${ACTIVATE_SCRIPT}
+}
+
+function venv3_activate(){
+    local ACTIVATE_SCRIPT=${1:=.venv3/bin/activate}
+    source ${ACTIVATE_SCRIPT}
+}
+
+
+function diff_and_patch(){
+    local orig=$1
+    local update=$2
+    patch ${orig} <<< $(diff -u ${orig} ${update})
+}
+
+function htmlserver() {
+    local port=${1:-8000}
+    python3 -m http.server $port
+}
+
+function findext() {
+    if [ -z "$1" ]; then
+        echo "missing parameter \$1: extension"
+        return 1
+    fi
+    find . -name "*.$1"
+}
+
+function findmatch() {
+    if [ -z "$1" ]; then
+        echo "missing parameter \$1: keyword"
+    fi
+    find . -name "*$1*"
+}
+
+# :vim set ft=sh:

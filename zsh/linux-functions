@@ -1,0 +1,66 @@
+## archiliux desktop configuration
+function pkg_rm_orphan(){
+    echo "rmove orphan packages"
+    sudo pacman -Rns $(pacman -Qdtq)
+}
+
+function batch_chown(){
+    ll $1 |  sed '1,2d' | awk -F '->' '{print $NF}' | xargs sudo chown -R $(whoami)
+}
+
+function ftppath(){
+    if [ -z $1 ]; then
+        echo "Argument \$1: file required!" && return 1
+    fi
+    file=$1
+    echo "ftp://$(hostname)$(realpath ${file})"
+}
+
+## auto start xscreensaver
+function screensaver_daemon(){
+    if [ -z "$(pgrep gnome-screensav)" ]; then
+        gnome-screensaver & disown
+    fi
+}
+
+function load_im_fcitx(){
+    ########### use fcitx as input source ############
+    export GTK_IM_MODULE=fcitx
+    export XMODIFIERS=@im=fcitx
+    export QT_IM_MODULE=fcitx
+    export XIM=fcitx
+    export XIM_PROGRAM=fcitx
+}
+
+function load_im_ibus(){
+    ########### use ibus as input source #############
+    export XMODIFIERS=@im=ibus
+    export QT_IM_MODULE=ibus
+    export XIM=ibus
+    export XIM_PROGRAM=ibus
+}
+
+## gdm will load ibus
+# load_im_ibus
+# screensaver_daemon
+function use_gdm(){
+    if [ ! -z $(pgrep gdm) ]; then
+        screensaver_daemon
+        load_im_ibus
+        ## auto-start X at login
+        if [ -z "${DISPLAY}" ] \
+            && [ -n "${XDG_VTNR}" ] \
+            && [ "${XDG_VTNR}" -eq 1 ]
+        then
+            exec startx
+        fi
+    fi
+}
+
+function war3(){
+    sudo wine /mnt/d/Warcraft\ III\ Frozen\ Throne/Warcraft\ III\ Frozen\ Throne/Frozen\ Throne.exe 2>&1 >/dev/null
+}
+
+#use_gdm
+
+# :vim set ft=sh:

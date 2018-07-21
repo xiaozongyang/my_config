@@ -1,3 +1,7 @@
+if has('python3')
+    silent! python3 1
+endif
+
 """"""""""""" tmux configs """""""""""""""""""
 " change cursor shape in tmux
 if exists('$TMUX')
@@ -18,15 +22,14 @@ endif
 set completeopt-=preview " remove preview documents diplayed in splited tab
 let g:ycm_min_num_of_chars_for_completion = 1 " start matching begin first input character
 let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keywords
-if !exists("g:ycm_semantic_triggers")
-    let g:ycm_semantic_triggers = {}
-endif
-let g:ycm_semantic_triggers['typescript'] = ['.']
+let g:ycm_server_python_interpreter='python2'
+
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
+Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer --system-libclang'}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'Shougo/unite.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Shougo/vimshell.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'xolox/vim-notes'
@@ -35,8 +38,8 @@ Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
-Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
+Plug 'tomtom/tcomment_vim'
 call plug#end()
 
 
@@ -97,10 +100,10 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 " map ^T to toggle NERDTree
-map <C-t> :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
 
 " bind my shortcuts with prefix C-a
-" noremap <C-a>d <Esc>:r !date +\%Y-\%m-\%d <CR>
+noremap <leader>today <Esc>:r !date +\%Y-\%m-\%d <CR>
 map <C-a>d :call append(line("."), today) <CR>
 map <C-a>c :call AddComment() <CR>
 
@@ -134,13 +137,15 @@ set bg=dark
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
+set rtp+=~/.fzf
+
 func Lookup()
     let g:vim_dict_window_number = bufwinnr("vim-dict")
     "if the window with name `wim-dict` exists then go to it
 
     let l:vim_dict_original_file_name = expand("%")
     " generate lookup command with word under cursor
-    let l:cmd = "silent $r !ydcv " . expand("<cword>") 
+    let l:cmd = "silent $r !ydcv " . expand("<cword>")
 
     " jump to `vim-dict` window if exists otherwise create it
     if g:vim_dict_window_number > 0
@@ -201,6 +206,7 @@ au BufNewFile *.cc,*.cpp call OnNewCpp()
 au BufRead *.c call OnNewC()
 au BufRead *.cc,*.cpp call OnNewCpp()
 au FileType nerdtree se nu rnu
+au FileType notes,markdown se tw=500
 
 augroup vimrc
     au BufRead * setlocal fdm=indent

@@ -1,0 +1,11 @@
+# :vim se ft=sh:
+function show_wifi_pass(){
+    [ -z $1 ] && echo "WIFI NAME required!" && return 1
+    ssid=$1
+    security find-generic-password -ga "${ssid}" | grep "password:"
+}
+
+function usb_umount(){
+    [ -z $1 ] && echo "Usb path required!" && return 1
+    diskutil umount $1
+}
