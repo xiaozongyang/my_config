@@ -1,12 +1,14 @@
 [user]
     name = xiaozy
-    email = xiaozy@fenbi.com
+    email = xiaozy01@fenbi.com
+
 [color]
     ui = true
     diff = true
     status = true
     branch = true
     interactive = true
+
 [alias]
     st = status
     ci = commit
@@ -46,7 +48,9 @@
     }; f"
 
 [core]
-    excludesfile = ~/.config/git/git-ignore-global
+    #excludesfile = ~/.config/git/git-ignore-global
+    excludesfile = git/git-ignore-global
     editor = vim
+
 [merge]
     tool = vimdiff

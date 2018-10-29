@@ -1,7 +1,7 @@
 _DIR=`cd $(dirname $0) && pwd`
 source $_DIR/functions
 
-########## ENV varaiables ###########
+################ ENV varaiables ############################
 export PATH="${USER_PATH}:${PATH}"
 export VISUAL="vim"
 export PAGER="vimpager"
@@ -23,7 +23,7 @@ if [ $(_os_type) = "osx" ]; then
 fi
 
 
-########## custom alias ##############
+############### custom alias ##############################
 _installed "nvim" && alias vim="nvim"
 alias vi="vim"
 alias tailf="tail -f"
@@ -35,8 +35,22 @@ _installed "hub" && alias git="hub"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
  _installed "jenv" && eval "$(jenv init -)"
-_installed "docker-mchine" eval "$(docker-machine env default)"
+_installed "docker-mchine" && eval "$(docker-machine env default)"
 # _installed "ssh-agent" && eval ssh-agent
+
+
+################ oh-my-zsh plugins ########################
+plugins=(
+    git
+    jump
+    osx
+    pip
+    jira
+    sudo
+    tmux
+    brew
+    docker
+)
 
 ############### Document Settings for VIM #################
 # :vim se ft=sh:
