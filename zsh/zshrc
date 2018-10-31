@@ -1,6 +1,19 @@
 _DIR=`cd $(dirname $0) && pwd`
 source $_DIR/functions
 
+################ oh-my-zsh plugins ########################
+plugins=(
+    git
+    autojump
+    osx
+    pip
+    jira
+    sudo
+    tmux
+    brew
+    docker
+)
+
 ################ ENV varaiables ############################
 export PATH="${USER_PATH}:${PATH}"
 export VISUAL="vim"
@@ -34,23 +47,10 @@ alias pydb3="python3 -m pdb"
 _installed "hub" && alias git="hub"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
- _installed "jenv" && eval "$(jenv init -)"
-_installed "docker-mchine" && eval "$(docker-machine env default)"
+_installed "jenv" && eval "$(jenv init -)"
+_installed "docker-machine" && eval "$(docker-machine env default)"
 # _installed "ssh-agent" && eval ssh-agent
 
-
-################ oh-my-zsh plugins ########################
-plugins=(
-    git
-    jump
-    osx
-    pip
-    jira
-    sudo
-    tmux
-    brew
-    docker
-)
 
 ############### Document Settings for VIM #################
 # :vim se ft=sh:
