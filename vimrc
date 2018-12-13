@@ -199,6 +199,7 @@ au BufNewFile *.tex call OnNewTex()
 au BufRead *.md set spell tw=1000
 au BufRead *.html set ts=2 sts=2 sw=2
 au BufRead *.xml set cuc
+au BufRead *.go noremap <leader>e :!go run % <CR>
 au BufRead * :loadview
 au BufWrite * :mkview
 au BufNewFile *.c call OnNewC()
@@ -220,6 +221,7 @@ noremap <leader>r :%s/\<<C-r><C-w>\>
 noremap <leader>t :%s/\s\+$// <CR>
 " search selected text as exact text
 vnoremap // y/\V<C-R>"<CR>
+vnoremap <leader>64 :'<,'>!python -m base64 -d <CR>
 
 command DiffOrig vert new | se bt=nofile | r ++edit #
     \ | 0d_ | diffthis | wincmd p | diffthis

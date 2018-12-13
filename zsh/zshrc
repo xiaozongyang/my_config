@@ -1,26 +1,15 @@
 _DIR=`cd $(dirname $0) && pwd`
 source $_DIR/functions
 
-################ oh-my-zsh plugins ########################
-plugins=(
-    git
-    autojump
-    osx
-    pip
-    jira
-    sudo
-    tmux
-    brew
-    docker
-)
 
 ################ ENV varaiables ############################
 export PATH="${USER_PATH}:${PATH}"
 export VISUAL="vim"
-export PAGER="vimpager"
+# export PAGER="vimpager"
 export LANG=en_US.UTF-8
 export LC_CTYPE=zh_CN.UTF-8
 export USER_PATH="${HOME}/.local/bin:${HOME}/.gem/ruby/2.5.0/bin"
+export LESS="-sNR"
 
 _installed "mvn" && export MAVEN_OPTS="-Xmx1024m"
 if [ $(_installed "wine") ]; then
@@ -40,7 +29,7 @@ fi
 _installed "nvim" && alias vim="nvim"
 alias vi="vim"
 alias tailf="tail -f"
-alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
+# alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
 alias pydb2="python2 -m pdb"
 alias pydb3="python3 -m pdb"
 
@@ -51,6 +40,19 @@ _installed "jenv" && eval "$(jenv init -)"
 _installed "docker-machine" && eval "$(docker-machine env default)"
 # _installed "ssh-agent" && eval ssh-agent
 
+################ oh-my-zsh plugins ########################
+#plugins=(
+#    git
+#    mvn
+#    autojump
+#    osx
+#    pip
+#    jira
+#    sudo
+#    tmux
+#    brew
+#    docker
+#)
 
 ############### Document Settings for VIM #################
 # :vim se ft=sh:

@@ -47,6 +47,13 @@
         git stash drop;         \
     }; f"
 
+    push-review = "!f() {      \
+        git add .;             \
+        git add -u;            \
+        git commit --amend -C HEAD; \
+        git push review;      \
+    }; f"
+
 [core]
     #excludesfile = ~/.config/git/git-ignore-global
     excludesfile = git/git-ignore-global
