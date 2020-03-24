@@ -10,6 +10,8 @@ export LANG=en_US.UTF-8
 export LC_CTYPE=zh_CN.UTF-8
 export USER_PATH="${HOME}/.local/bin:${HOME}/.gem/ruby/2.5.0/bin"
 export LESS="-sNR"
+export RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.sjtug.sjtu.edu.cn/rust-static/rustu
 
 _installed "mvn" && export MAVEN_OPTS="-Xmx1024m"
 if [ $(_installed "wine") ]; then
@@ -32,6 +34,18 @@ alias tailf="tail -f"
 # alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
 alias pydb2="python2 -m pdb"
 alias pydb3="python3 -m pdb"
+# maven
+alias mcc="mvn clean compile -q "
+alias mcp="mvn clean package -q"
+alias mci="mvn clean install -q"
+alias mcd="mvn clean deploy -q"
+alias mdt="mvn dependency:tree"
+alias mda="mvn dependency:analyze"
+alias mcpst="mvn clean package -Dmaven.test.skip=true"
+alias mcist="mvn clean install -Dmaven.test.skip=true"
+
+alias szshrc="source ~/.zshrc"
+alias vzshrc="vim ~/.zshrc"
 
 _installed "hub" && alias git="hub"
 

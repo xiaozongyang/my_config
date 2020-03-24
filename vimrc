@@ -27,12 +27,11 @@ let g:ycm_server_python_interpreter='python2'
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --clang-completer --system-libclang'}
+Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --java-completer'}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf'
 Plug 'Shougo/vimshell.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
-Plug 'xolox/vim-notes'
 Plug 'xolox/vim-misc'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
@@ -40,6 +39,8 @@ Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'tomtom/tcomment_vim'
+Plug 'danchoi/elinks.vim'
+Plug 'xolox/vim-notes'
 call plug#end()
 
 
@@ -50,6 +51,30 @@ let g:lightline = {
 let g:today = strftime("%Y-%m-%d (%A)")
 let g:me = "xiaozongyang"
 let g:tpl_dir = "~/.vim/templates/"
+
+"""""""""""""""' fzf configurations """""""""""
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R'
+
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 
 func! AddComment()
     let l:tpl_name = expand('%:e').'-comment.tpl'
@@ -137,7 +162,6 @@ set bg=dark
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
-set rtp+=~/.fzf
 
 func Lookup()
     let g:vim_dict_window_number = bufwinnr("vim-dict")
@@ -198,7 +222,6 @@ au BufNewFIle *.html call OnNewHtml()
 au BufNewFile *.tex call OnNewTex()
 au BufRead *.md set spell tw=1000
 au BufRead *.html set ts=2 sts=2 sw=2
-au BufRead *.xml set cuc
 au BufRead *.go noremap <leader>e :!go run % <CR>
 au BufRead * :loadview
 au BufWrite * :mkview
