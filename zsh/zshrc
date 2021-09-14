@@ -28,7 +28,6 @@ fi
 
 
 ############### custom alias ##############################
-_installed "nvim" && alias vim="nvim"
 alias vi="vim"
 alias tailf="tail -f"
 # alias less="$(ls /usr/share/vim/vim*/macros/less.sh)"
@@ -51,7 +50,6 @@ _installed "hub" && alias git="hub"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 _installed "jenv" && eval "$(jenv init -)"
-_installed "docker-machine" && eval "$(docker-machine env default)"
 # _installed "ssh-agent" && eval ssh-agent
 
 ################ oh-my-zsh plugins ########################

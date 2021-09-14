@@ -12,17 +12,11 @@ else
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-" display background color in tmux
-if exists('$TMUX')
-    set term=screen-256color
-endif
-
-
 """"" YCM configurations
 set completeopt-=preview " remove preview documents diplayed in splited tab
 let g:ycm_min_num_of_chars_for_completion = 1 " start matching begin first input character
 let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keywords
-let g:ycm_server_python_interpreter='python2'
+let g:ycm_server_python_interpreter='python3'
 
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
@@ -41,6 +35,11 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'danchoi/elinks.vim'
 Plug 'xolox/vim-notes'
+Plug 'udalov/kotlin-vim'
+Plug 'elzr/vim-json'
+Plug 'cespare/vim-toml'
+Plug 'puremourning/vimspector'
+Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
 call plug#end()
 
 
@@ -115,6 +114,11 @@ func OnNewHtml()
     call MySubstitute('<AUTHOR>', g:me, 'g')
     call MySubstitute('<TODAY>', g:today, 'g')
     set ts=2 sts=2 sw=2
+endfunc
+
+func OnReadMarkdown()
+    let g:vmt_insert_anchors = 1
+    let g:vmt_auto_update_on_save = 1
 endfunc
 
 """"""""""""""""""" key maps """""""""""""""""""
@@ -231,6 +235,7 @@ au BufRead *.c call OnNewC()
 au BufRead *.cc,*.cpp call OnNewCpp()
 au FileType nerdtree se nu rnu
 au FileType notes,markdown se tw=500
+au BufRead *.md call OnReadMarkdown();
 
 augroup vimrc
     au BufRead * setlocal fdm=indent

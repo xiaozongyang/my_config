@@ -21,7 +21,9 @@
     ll = log --decorate --graph --all
     pl = pull origin master
     lc = diff --name--status --diff-filter=U
-    mb = merge --no--ff --log
+    mb = merge --no-ff --log
+    bl = blame --color-lines --color-by-age -n
+    cp = cherry-pick
 
     stash-untracked = "!f() {    \
         git stash;               \
@@ -54,10 +56,34 @@
         git push review;      \
     }; f"
 
-[core]
-    #excludesfile = ~/.config/git/git-ignore-global
-    excludesfile = git/git-ignore-global
-    editor = vim
+
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
+
+[interactive]
+    diffFilter = delta --color-only --features=interactive
+
+[delta]
+    features = decorations
+    side-by-side = true
+
+[delta "interactive"]
+    keep-plus-minus-markers = false
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
 
 [merge]
-    tool = vimdiff
+    tool  = vimdiff
+
+[core]
+    excludesfile = git/git-ignore-global
