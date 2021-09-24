@@ -21,7 +21,6 @@ let g:ycm_server_python_interpreter='python3'
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-Plug 'Valloric/YouCompleteMe', {'do': 'python3 install.py --java-completer'}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
 Plug 'junegunn/fzf'
 Plug 'Shougo/vimshell.vim'
@@ -40,6 +39,7 @@ Plug 'elzr/vim-json'
 Plug 'cespare/vim-toml'
 Plug 'puremourning/vimspector'
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 
@@ -250,6 +250,7 @@ noremap <leader>t :%s/\s\+$// <CR>
 " search selected text as exact text
 vnoremap // y/\V<C-R>"<CR>
 vnoremap <leader>64 :'<,'>!python -m base64 -d <CR>
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 command DiffOrig vert new | se bt=nofile | r ++edit #
     \ | 0d_ | diffthis | wincmd p | diffthis
