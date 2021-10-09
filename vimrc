@@ -23,21 +23,14 @@ let g:ycm_server_python_interpreter='python3'
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
 Plug 'junegunn/fzf'
-Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/deol.nvim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'xolox/vim-misc'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
-Plug 'HerringtonDarkholme/yats.vim'
 Plug 'tomtom/tcomment_vim'
-Plug 'danchoi/elinks.vim'
-Plug 'xolox/vim-notes'
-Plug 'udalov/kotlin-vim'
-Plug 'elzr/vim-json'
-Plug 'cespare/vim-toml'
-Plug 'puremourning/vimspector'
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
@@ -235,7 +228,7 @@ au BufRead *.c call OnNewC()
 au BufRead *.cc,*.cpp call OnNewCpp()
 au FileType nerdtree se nu rnu
 au FileType notes,markdown se tw=500
-au BufRead *.md call OnReadMarkdown();
+au BufRead *.md call OnReadMarkdown()
 
 augroup vimrc
     au BufRead * setlocal fdm=indent

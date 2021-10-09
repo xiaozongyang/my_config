@@ -88,4 +88,9 @@
 [core]
     excludesfile = git/git-ignore-global
     quotepath = false
+	autocrlf = false
 
+[http]
+	sslBackend = openssl
+[remote "origin"]
+	proxy = 127.0.0.1:7890
