@@ -28,11 +28,16 @@ Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'xolox/vim-misc'
 Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
+Plug 'easymotion/vim-easymotion'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
-Plug 'tomtom/tcomment_vim'
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 call plug#end()
 
 
@@ -131,6 +136,7 @@ map <C-a>c :call AddComment() <CR>
 
 
 """"""""""""" basic settings """""""""""""""""
+set incsearch
 set nu rnu" set number and relativenumber on
 set listchars=tab:>-,trail:-,eol:$,extends:>,precedes:<,nbsp:. " set list chars
 set list
@@ -250,3 +256,16 @@ command DiffOrig vert new | se bt=nofile | r ++edit #
 
 " notes
 let g:notes_directories = ['~/Documents/Notes']
+
+" language client
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ }
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <leader>r <Plug>(lcn-rename)
+nmap <silent> <leader>R <Plug>(lcn-references)
