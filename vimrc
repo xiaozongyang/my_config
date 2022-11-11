@@ -12,32 +12,24 @@ else
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-""""" YCM configurations
-set completeopt-=preview " remove preview documents diplayed in splited tab
-let g:ycm_min_num_of_chars_for_completion = 1 " start matching begin first input character
-let g:ycm_seed_identifiers_with_syntax = 1 " enable completion for language keywords
-let g:ycm_server_python_interpreter='python3'
-
 """""""""""""""""""vim-plug"""""""""""""""""""""
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'junegunn/fzf'
-Plug 'Shougo/deol.nvim'
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
-Plug 'easymotion/vim-easymotion'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
-Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
-Plug 'tpope/vim-surround'
-Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-fugitive'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
+Plug 'cpiger/NeoDebug'
 call plug#end()
 
 
@@ -138,17 +130,21 @@ map <C-a>c :call AddComment() <CR>
 """"""""""""" basic settings """""""""""""""""
 set incsearch
 set nu rnu" set number and relativenumber on
-set listchars=tab:>-,trail:-,eol:$,extends:>,precedes:<,nbsp:. " set list chars
+set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:. " set list chars
 set list
 set expandtab
-set tw =100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
+set tw=100 ts=4 sts=4 sw=4 ai " set tabwidth, tabstop, softtabstop, shfitwidth, autoindent
 set enc=utf8 fenc=utf8 ff=unix " set encoding, fileencoding, fileformat
 set fencs=utf8,cp936,cp18030,big5,latin1
 set ls=2 " set lastline=2  show statusline
 set hls " set highlightsearch
 set t_Co=256 " export TERM=xterm-256color before
 set et
+set cc=100
+set spell
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 highlight cursorline ctermbg=gray ctermfg=white
+highlight colorcolumn ctermbg=gray ctermfg=white
 
 set nocompatible               " be iMproved
 filetype off                   " required!
@@ -161,9 +157,16 @@ set sc smd " show command and mode
 " set vim colorscheme to solarized-light
 syntax enable
 "colorscheme solarized
-set bg=dark
+set bg=light
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
+set exrc
+set secure
+" foldmethod: indent
+set fdm=manual
+" foldnestedmax
+set fdn=3
+set showmatch
 
 
 func Lookup()
@@ -212,44 +215,37 @@ function OnNewC()
     noremap <leader>d :!gdb %:r <CR>
 endfunc
 
-function OnNewCpp()
-    noremap <leader>c :!g++ % -o %:r -g -Wall -std=c++11<CR>
-    noremap <leader>e :!./%:r <CR>
-    noremap <leader>d :!gdb %:r <CR>
-endfunc
-
 
 """"""""""""" Event Listeners """""""""""""""""
 au BufNewFile *.py call OnNewPython()
 au BufNewFIle *.html call OnNewHtml()
 au BufNewFile *.tex call OnNewTex()
+au BufNewFile *.go set noet
+
 au BufRead *.md set spell tw=1000
 au BufRead *.html set ts=2 sts=2 sw=2
-au BufRead *.go noremap <leader>e :!go run % <CR>
-au BufRead * :loadview
-au BufWrite * :mkview
+au BufRead *.go set noet nolist
+au BufRead *.md call OnReadMarkdown()
+au BufRead *.git/COMMIT_EDITMSG se cc=50,72
+au BufRead *.c,*.cc,*.cpp,*.h call BindCCKeys()
+
+" au BufRead * :loadview
+" au BufWrite * :mkview
 au BufNewFile *.c call OnNewC()
-au BufNewFile *.cc,*.cpp call OnNewCpp()
-au BufRead *.c call OnNewC()
-au BufRead *.cc,*.cpp call OnNewCpp()
 au FileType nerdtree se nu rnu
 au FileType notes,markdown se tw=500
-au BufRead *.md call OnReadMarkdown()
 
 augroup vimrc
     au BufRead * setlocal fdm=indent
     au BufWinEnter * if &fdm == 'indent' | setlocal fdm=manual | endif
 augroup END
 
-noremap <leader>l :call Lookup() <CR>
-" replace current word
 noremap <leader>r :%s/\<<C-r><C-w>\>
 " remove trailing spaces
 noremap <leader>t :%s/\s\+$// <CR>
 " search selected text as exact text
 vnoremap // y/\V<C-R>"<CR>
 vnoremap <leader>64 :'<,'>!python -m base64 -d <CR>
-nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 command DiffOrig vert new | se bt=nofile | r ++edit #
     \ | 0d_ | diffthis | wincmd p | diffthis
@@ -257,15 +253,90 @@ command DiffOrig vert new | se bt=nofile | r ++edit #
 " notes
 let g:notes_directories = ['~/Documents/Notes']
 
-" language client
+" ale
+let g:ale_c_parse_makefile=1
+" let g:ale_c_build_dir="/data00/home/xiaozongyang.solaris/code/cpp/bytestore/build"
+
+" LanguageClient
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    \ 'python': ['/usr/local/bin/pyls'],
-    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-    \ }
+  \ 'cpp': ['/usr/bin/clangd-11'],
+  \ 'c': ['/usr/bin/clangd-11'],
+  \ 'go': ['gopls']
+  \ }
+let g:LanguageClient_serverStderr = '/tmp/clangd.stderr'
+nmap <C-p> <Plug>(lcn-menu)
+" Or map each action separately
 nmap <silent>K <Plug>(lcn-hover)
 nmap <silent> gd <Plug>(lcn-definition)
-nmap <silent> <leader>r <Plug>(lcn-rename)
-nmap <silent> <leader>R <Plug>(lcn-references)
+nmap <silent> ren <Plug>(lcn-rename)
+nmap <silent> gR <Plug>(lcn-references)
+nmap <silent> gs <Plug>(lcn-symbols)
+nmap <silent> gi <Plug>(lcn-implementation)
+
+func BindCCKeys()
+    nnoremap <leader>cc :e %<.cc<CR>
+    nnoremap <leader>cpp :e %<.cpp<CR>
+    nnoremap <leader>ct :e %<_test.cc<CR>
+    nnoremap <leader>h :e %<.h<CR>
+    nnoremap <leader>c :e %<.c<CR>
+endfunc
+
+" fzf commands mapping
+nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>wd :Windows<CR>
+nnoremap <leader>bl :BLines<CR>
+nnoremap <leader>l :Lines<CR>
+nnoremap <leader>rg :Rg <C-R><C-W><CR>
+" scb: scrollbind
+nnoremap <leader>hiss :History/<CR>
+nnoremap <leader>hisf :History<CR>
+
+func GitBlame()
+    set scb
+    tabnew
+    r !git blame '#'
+    set scb
+    set nowrap
+    w! /tmp/git.blame
+    set ft=cpp
+endfunc
+nnoremap <leader>gbl :call GitBlame()<CR>
+
+func GitLog()
+    set scb
+    tabnew
+    r !git log -p '#'
+    set scb
+    set nowrap
+    w! /tmp/git.log
+    set ft=cpp
+endfunc
+nnoremap <leader>glg :call GitLog()<CR>
+
+" Easy Align
+let g:easy_align_delimiters = {
+\ '>': { 'pattern': '>>\|=>\|>' },
+\ '<': { 'pattern': '<<' },
+\ '/': {
+\     'pattern':         '//\+\|/\*\|\*/',
+\     'delimiter_align': 'l',
+\     'ignore_groups':   ['!Comment'] },
+\ ']': {
+\     'pattern':       '[[\]]',
+\     'left_margin':   0,
+\     'right_margin':  0,
+\     'stick_to_left': 0
+\   },
+\ ')': {
+\     'pattern':       '[()]',
+\     'left_margin':   0,
+\     'right_margin':  0,
+\     'stick_to_left': 0
+\   },
+\ 'd': {
+\     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+\     'left_margin':  0,
+\     'right_margin': 0
+\   }
+\ }
