@@ -1,6 +1,6 @@
 [user]
-    name = xiaozy
-    email = xiaozy01@fenbi.com
+    name = xiaozongyang
+    email = xiaozngyang@kanyun.com
 
 [color]
     ui = true
@@ -8,6 +8,9 @@
     status = true
     branch = true
     interactive = true
+
+[push]
+    autoSetupRemote=true
 
 [alias]
     st = status
@@ -58,10 +61,10 @@
 
 
 [pager]
-    diff = delta
-    log = delta
-    reflog = delta
-    show = delta
+    diff = less
+    log = less
+    reflog = less
+    show = less
 
 [interactive]
     diffFilter = delta --color-only --features=interactive
@@ -92,5 +95,3 @@
 
 [http]
 	sslBackend = openssl
-[remote "origin"]
-	proxy = 127.0.0.1:7890

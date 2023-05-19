@@ -16,7 +16,7 @@ endif
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
 " Plug 'w0rp/ale'
@@ -29,7 +29,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'cpiger/NeoDebug'
 call plug#end()
 
 
@@ -261,8 +260,10 @@ let g:ale_c_parse_makefile=1
 let g:LanguageClient_serverCommands = {
   \ 'cpp': ['/usr/bin/clangd-11'],
   \ 'c': ['/usr/bin/clangd-11'],
+  \ 'rust': ['~/.local/bin/rust-analyzer'],
   \ 'go': ['gopls']
   \ }
+  " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
 let g:LanguageClient_serverStderr = '/tmp/clangd.stderr'
 nmap <C-p> <Plug>(lcn-menu)
 " Or map each action separately

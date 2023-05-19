@@ -67,4 +67,16 @@ function findmatch() {
     find . -name "*$1*"
 }
 
-# :vim set ft=sh:
+function mvn-set-version() {
+    if [ -z $1 ]; then
+        echo "Usage: mvn-set-version <version>"
+        return 1
+    fi
+    mvn versions:set -DnewVersion=$1 -DprocessAllModules -DgenerateBackupPoms=false
+}
+
+function get-local-xxl() {
+    echo -e "$(get-local-ip):${1:-9380}"
+}
+
+# :vim set ft=zsh:
