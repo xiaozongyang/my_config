@@ -1,6 +1,7 @@
 _DIR=`cd $(dirname $0) && pwd`
 source $_DIR/functions
 
+uname -a | grep -i 'darwin'>/dev/null && source $_DIR/osx.zsh
 
 ################ ENV varaiables ############################
 export PATH="${USER_PATH}:${PATH}"

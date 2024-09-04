@@ -2,6 +2,9 @@ if has('python3')
     silent! python3 1
 endif
 
+set rtp+=/opt/homebrew/opt/fzf
+set directory=$HOME/.vim/swapfiles
+
 """"""""""""" tmux configs """""""""""""""""""
 " change cursor shape in tmux
 if exists('$TMUX')
@@ -258,8 +261,8 @@ let g:ale_c_parse_makefile=1
 
 " LanguageClient
 let g:LanguageClient_serverCommands = {
-  \ 'cpp': ['/usr/bin/clangd-11'],
-  \ 'c': ['/usr/bin/clangd-11'],
+  \ 'cpp': ['/usr/bin/clangd'],
+  \ 'c': ['/usr/bin/clangd'],
   \ 'rust': ['~/.local/bin/rust-analyzer'],
   \ 'go': ['gopls']
   \ }
