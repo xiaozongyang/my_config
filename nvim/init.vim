@@ -22,7 +22,6 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }" NERD tree
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
-" Plug 'w0rp/ale'
 Plug 'junegunn/vim-easy-align'
 Plug 'noplans/lightline.vim'
 Plug 'tpope/vim-commentary'
@@ -32,10 +31,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'roxma/nvim-yarp'
-Plug 'fatih/vim-go/', { 'do': ':GoUpdateBinaries' }
-Plug 'nsf/gocode', { 'rtp': 'vim' , 'for': 'go'}
-Plug 'mtdl9/vim-log-highlighting'
+Plug 'Shougo/deoplete.nvim'
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
@@ -163,7 +159,7 @@ set sc smd " show command and mode
 " set vim colorscheme to solarized-light
 syntax enable
 "colorscheme solarized
-set bg=light
+set bg=dark
 " change hilight search color
 hi Search cterm=NONE ctermfg=grey ctermbg=blue
 set exrc
@@ -173,8 +169,6 @@ set fdm=manual
 " foldnestedmax
 set fdn=3
 set showmatch
-set shortmess-=5
-set showcmd
 
 
 func Lookup()
@@ -230,7 +224,7 @@ au BufNewFIle *.html call OnNewHtml()
 au BufNewFile *.tex call OnNewTex()
 au BufNewFile *.go set noet
 
-au BufRead *.md,*.yaml,*.yml set spell tw=1000
+au BufRead *.md set spell tw=1000
 au BufRead *.html set ts=2 sts=2 sw=2
 au BufRead *.go set noet nolist
 au BufRead *.md call OnReadMarkdown()

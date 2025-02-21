@@ -18,4 +18,8 @@ alias kxc="kx -c"
 ## kubectl
 alias k="kubectl"
 alias kg="k get"
+alias kgw="kg -o wide"
+alias kgy="kg -o yaml"
 alias ke="k exec -it"
+alias kd="k describe"
+alias kdp="kd po"
