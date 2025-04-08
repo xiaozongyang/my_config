@@ -93,17 +93,6 @@ function kg-pod-by-node() {
     eval "$command"
 }
 
-function k-logtail-login() {
-    if [ -z $1 ]; then
-        echo "Usage: k-logtail-login <pod>"
-        return 1
-    fi
-
-    local command="kubectl exec -it -n mlogs $1 -- /bin/bash"
-    echo "exec: $command"
-    eval $command
-}
-
 function copy-infra-control-ip() {
     cat ~/.ssh/infra-control-host | pbcopy
     tmux loadb ~/.ssh/infra-control-host
@@ -143,7 +132,7 @@ function k-diff-f() {
         echo "Usage: k-diff-f <yaml_file>"
         return 1
     fi
-    kubectl diff -f $1 | vim -
+    kubectl diff -f $1 | colordiff
 }
 
 function go-pprof-http() {
@@ -181,10 +170,69 @@ function login-to-pod() {
         echo "usage: login-to-pod <pod>"
         return 1
     fi
-    if [ -z $2 ]; then
-        ke $1 -- /bin/bash
-    else
-        ke -n $2 $1 -- /bin/bash
+    local cmd="kubectl exec -it $1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
     fi
+    if [ ! -z $3 ]; then
+        cmd="$cmd -c $3"
+    fi
+    cmd="$cmd -- /bin/sh"
+    echo $cmd
+    eval $cmd
 }
+
+function show-pod-logs() {
+    if [ -z $1 ]; then
+        echo "Usage: show-pod-logs <pod> [ns] [container]"
+        return 1
+    fi
+    local cmd="kubectl logs $1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    fi
+    if [ ! -z $3 ]; then
+        cmd="$cmd -c $3"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
+function desc-pod() {
+    if [ -z $1 ]; then
+        echo "Usage: desc-pod <pod> [ns] [container]"
+        return 1
+    fi
+    local cmd="kubectl describe po $1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
+function get-node-conditions() {
+    if [ -z $1 ]; then
+        echo "Usage: get-node-conditions <node>"
+    fi
+    kubectl describe no $1 | rg 'Conditions' -A 10 -B 5
+}
+
+function get-pods-by-node() {
+    if [ -z $1 ]; then
+        echo "Usage: get-pods-by-node <nodeName> [namespace] [keyword]"
+    fi
+    cmd="kubectl get pods --field-selector spec.nodeName=$1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    else
+        cmd="$cmd -A"
+    fi
+    if [ ! -z $3 ]; then
+        cmd="$cmd | grep $3"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
 # :vim set ft=zsh:

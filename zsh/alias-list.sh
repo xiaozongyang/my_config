@@ -20,6 +20,8 @@ alias grps="git rev-parse --short"
 alias gcamc="git commit --amend -C @"
 # kubectl
 alias kaf="k apply -f"
+alias kcf="k create -f"
+alias kdff="k diff -f"
 alias kafd="k apply --dry-run=server -f"
 alias kdel="k delete"
 alias kdelf="kdel -f"

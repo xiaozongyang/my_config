@@ -16,6 +16,7 @@ export RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.sjtug.sjtu.edu.cn/rust-static/rustu
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
+export KUBECTL_EXTERNAL_DIFF="colordiff"
 
 _installed "mvn" && export MAVEN_OPTS="-Xmx1024m"
 if [ $(_installed "wine") ]; then
