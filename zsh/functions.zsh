@@ -93,11 +93,6 @@ function kg-pod-by-node() {
     eval "$command"
 }
 
-function copy-infra-control-ip() {
-    cat ~/.ssh/infra-control-host | tr -d '\n' | pbcopy
-    tmux loadb ~/.ssh/infra-control-host
-}
-
 function get-process-by-port() {
     if [ -z $1 ]; then
         echo "Usage: get-process-by-port <port>"
