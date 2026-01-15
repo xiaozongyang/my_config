@@ -1,9 +1,10 @@
+#bash
 alias vzshrc="vim ~/.zshrc"
 alias szshrc="source ~/.zshrc"
+alias wcl="wc -l"
+
 alias bi="brew install"
 alias bic="bi --cask"
-alias python="python3"
-alias py="python"
 
 # maven
 alias mci="mvn clean install"
@@ -30,6 +31,14 @@ alias gco="g checkout"
 alias gcob="g checkout -b"
 
 # kubectl
+alias k="kubectl"
+alias kg="k get"
+alias kgw="kg -o wide"
+alias kgy="kg -o yaml"
+alias kgj="kg -o j"
+alias ke="k exec -it"
+alias kd="k describe"
+alias kdp="kd po"
 alias kaf="k apply -f"
 alias kcf="k create -f"
 alias kdff="k diff -f"
@@ -37,6 +46,11 @@ alias kafd="k apply --dry-run=server -f"
 alias kdel="k delete"
 alias kdelf="kdel -f"
 alias kcgc="kubectl config get-contexts"
+
+## kubectx
+alias kx="kubectx"
+alias kxc="kx -c"
+alias kxcp="kxc | pbcopy"
 
 # go
 alias gomt="go mod tidy"
@@ -49,4 +63,6 @@ alias java-debug="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,add
 alias get-local-ip="ifconfig| grep 'inet ' | grep '10.' | awk '{print \$2}'"
 
 # python
+alias python="python3"
+alias py="python"
 alias pyvenv="python -m venv .venv && source .venv/bin/activate"

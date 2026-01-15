@@ -127,21 +127,13 @@ function next-random-port() {
        echo $port
 }
 
+# kubectl
 function k-diff-f() {
     if [[ -z $1 ]]; then
         echo "Usage: k-diff-f <yaml_file>"
         return 1
     fi
     kubectl diff -f $1 | colordiff
-}
-
-function go-pprof-http() {
-    if [ -z $1 ]; then
-        return 1
-    fi
-    cmd="go tool pprof -http=:$(next-random-port) $1"
-    echo $cmd
-    eval $cmd
 }
 
 function k-set-default-ns() {
@@ -153,17 +145,20 @@ function k-set-default-ns() {
     kubectl config set-context --current --namespace=$1
 }
 
-function go-dump-pprof-allocs() {
+function k-set-deploy-replicas-to-0() {
     if [ -z $1 ]; then
-        echo "usage: go-dump-pprof-allocs"
+        echo "Usage: k-set-deploy-replicas-to-0 <deploy>"
         return 1
     fi
 
-    out="/tmp/allocs.out-$(date +'%s')"
-    curl $1/debug/pprof/allocs > $out
-    echo $out
-    #go tool pprof -http=:8888 $out
+    cmd="kubectl patch deployment $1 -p '{\"spec\":{\"replicas\":0}}'"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    fi
+    echo $cmd
+    eval $cmd
 }
+
 
 function k-login-to-pod() {
     if [ -z $1 ]; then
@@ -348,5 +343,27 @@ function k-desc-po() {
     eval $cmd
 }
 
+
+# go
+function go-pprof-http() {
+    if [ -z $1 ]; then
+        return 1
+    fi
+    cmd="go tool pprof -http=:$(next-random-port) $1"
+    echo $cmd
+    eval $cmd
+}
+
+function go-dump-pprof-allocs() {
+    if [ -z $1 ]; then
+        echo "usage: go-dump-pprof-allocs"
+        return 1
+    fi
+
+    out="/tmp/allocs.out-$(date +'%s')"
+    curl $1/debug/pprof/allocs > $out
+    echo $out
+    #go tool pprof -http=:8888 $out
+}
 
 # :vim set ft=zsh:
