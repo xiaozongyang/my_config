@@ -94,7 +94,7 @@ function kg-pod-by-node() {
 }
 
 function copy-infra-control-ip() {
-    cat ~/.ssh/infra-control-host | pbcopy
+    cat ~/.ssh/infra-control-host | tr -d '\n' | pbcopy
     tmux loadb ~/.ssh/infra-control-host
 }
 
@@ -165,9 +165,9 @@ function go-dump-pprof-allocs() {
     #go tool pprof -http=:8888 $out
 }
 
-function login-to-pod() {
+function k-login-to-pod() {
     if [ -z $1 ]; then
-        echo "usage: login-to-pod <pod>"
+        echo "usage: k-login-to-pod <pod>"
         return 1
     fi
     local cmd="kubectl exec -it $1"
@@ -182,45 +182,84 @@ function login-to-pod() {
     eval $cmd
 }
 
-function show-pod-logs() {
+function k-last-pod-logs() {
     if [ -z $1 ]; then
-        echo "Usage: show-pod-logs <pod> [ns] [container]"
-        return 1
+        echo "Usage: k-last-pod-logs <pod> [ns] [duration]"
     fi
     local cmd="kubectl logs $1"
     if [ ! -z $2 ]; then
         cmd="$cmd -n $2"
     fi
     if [ ! -z $3 ]; then
-        cmd="$cmd -c $3"
+        cmd="$cmd --since $3"
+    else
+        cmd="$cmd --since 5m"
+    fi
+    if [ ! -z $4 ]; then
+        cmd="$cmd -c $4"
     fi
     echo $cmd
     eval $cmd
 }
 
-function desc-pod() {
+function k-show-pod-logs() {
     if [ -z $1 ]; then
-        echo "Usage: desc-pod <pod> [ns] [container]"
+        echo "Usage: k-show-pod-logs <pod> [ns] [container]"
         return 1
     fi
-    local cmd="kubectl describe po $1"
+    local cmd="kubectl logs $1"
     if [ ! -z $2 ]; then
         cmd="$cmd -n $2"
+    else
+        local ns=$(detect-pod-namespace $1)
+        if [ ! -z $ns ]; then
+            cmd="$cmd -n $ns"
+        fi
+    fi
+    if [ ! -z $3 ]; then
+        cmd="$cmd -c $3"
+    fi
+    if [ ! -z $4 ]; then
+        cmd="$cmd --since $4"
     fi
     echo $cmd
     eval $cmd
 }
 
-function get-node-conditions() {
+function k-follow-pod-logs() {
     if [ -z $1 ]; then
-        echo "Usage: get-node-conditions <node>"
+        echo "Usage: k-follow-pod-logs <pod> [ns] [container]"
+        return 1
+    fi
+    local cmd="kubectl logs $1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    else
+        local ns=$(detect-pod-namespace $1)
+        if [ ! -z $ns ]; then
+            cmd="$cmd -n $ns"
+        fi
+    fi
+    if [ ! -z $3 ]; then
+        cmd="$cmd -c $3"
+    fi
+    cmd="$cmd -f"
+    echo $cmd
+    eval $cmd
+}
+
+function k-get-node-conditions() {
+    if [ -z $1 ]; then
+        echo "Usage: k-get-node-conditions <node>"
+        return 1
     fi
     kubectl describe no $1 | rg 'Conditions' -A 10 -B 5
 }
 
-function get-pods-by-node() {
+function k-get-pods-by-node() {
     if [ -z $1 ]; then
-        echo "Usage: get-pods-by-node <nodeName> [namespace] [keyword]"
+        echo "Usage: k-get-pods-by-node <nodeName> [namespace] [keyword]"
+        return 1
     fi
     cmd="kubectl get pods --field-selector spec.nodeName=$1"
     if [ ! -z $2 ]; then
@@ -234,5 +273,80 @@ function get-pods-by-node() {
     echo $cmd
     eval $cmd
 }
+
+function detect-pod-namespace() {
+    if [ -z $1 ]; then
+        echo "Usage: detect-pod-namespace <pod>"
+        return 1
+    fi
+    local po=$1
+    case "$po" in
+        node-exporter*)
+            echo mon-stack
+            ;;
+        dcgm-exporter*)
+            echo mon-stack
+            ;;
+        nvidia-gpu-exporter*)
+            echo mon-stack
+            ;;
+        vector*)
+            echo vector
+            ;;
+        vmagent*)
+            echo mon-sys
+            ;;
+        kube-state-metrics*)
+            echo mon-stack
+            ;;
+    esac
+}
+
+function k-restart-ds() {
+    ds=$1
+    ns=$2
+    if [ -z $1 ]; then
+        echo "Usage: k-restart-ds <ds> [<ns>]"
+        return 1
+    fi
+    cmd="kubectl patch ds $ds"
+    if [ ! -z $ns ]; then
+        cmd="$cmd -n $ns"
+    fi
+    cmd="$cmd -p '{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"kubectl.kubernetes.io/restartedAt\":\"$(date +%Y-%m-%dT%H:%M:%S)\"}}}}}'"
+    echo $cmd
+    eval $cmd
+}
+
+function k-restart-deploy() {
+    deploy=$1
+    ns=$2
+    if [ -z $1 ]; then
+        echo "Usage: k-restart-deploy <deploy> [<ns>]"
+        return 1
+    fi
+    cmd="kubectl patch deploy $deploy"
+    if [ ! -z $ns ]; then
+        cmd="$cmd -n $ns"
+    fi
+    cmd="$cmd -p '{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"kubectl.kubernetes.io/restartedAt\":\"$(date +%Y-%m-%dT%H:%M:%S)\"}}}}}'"
+    echo $cmd
+    eval $cmd
+}
+
+function k-desc-po() {
+    po=$1
+    ns=$2
+    if [ -z $1 ]; then
+        echo "Usage: k-desc-po <po> [<ns>]"
+    fi
+    cmd="kubectl describe po $po"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $ns"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
 
 # :vim set ft=zsh:

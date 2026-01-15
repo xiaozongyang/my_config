@@ -269,7 +269,7 @@ let g:ale_c_parse_makefile=1
 let g:LanguageClient_serverCommands = {
   \ 'cpp': ['/usr/bin/clangd'],
   \ 'c': ['/usr/bin/clangd'],
-  \ 'rust': ['~/.local/bin/rust-analyzer'],
+  \ 'rust': ['/opt/homebrew/bin/rust-analyzer'],
   \ 'go': ['gopls']
   \ }
   " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
