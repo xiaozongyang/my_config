@@ -154,6 +154,19 @@ function k-set-deploy-replicas-to-0() {
     eval $cmd
 }
 
+function kdel-po() {
+    if [ -z $1 ]; then
+        echo "Usage: k-del-po <pod> [<ns>]"
+        return 1
+    fi
+    cmd="kubectl delete po $1"
+    if [ ! -z $2 ]; then
+        cmd="$cmd -n $2"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
 
 function k-login-to-pod() {
     if [ -z $1 ]; then
@@ -359,6 +372,65 @@ function go-dump-pprof-allocs() {
     curl $1/debug/pprof/allocs > $out
     echo $out
     #go tool pprof -http=:8888 $out
+}
+
+# argocd
+function argocd-app-delete() {
+    if [ -z $1 ]; then
+        echo "Usage: argocd-app-delete <app-name>"
+        return 1
+    fi
+    cmd="argocd app delete $1 --cascade=false"
+    echo $cmd
+    eval $cmd
+}
+
+# git
+function git-push-mr() {
+    # push to origin, pass through any extra args
+    git push origin HEAD "$@"
+    if [ $? -ne 0 ]; then
+        echo "git push failed"
+        return 1
+    fi
+
+    local branch=$(git branch --show-current)
+    if [ "$branch" = "main" ]; then
+        echo "on main branch, skip MR creation"
+        return 0
+    fi
+
+    # check if MR already exists
+    local existing=$(glab mr list --source-branch="$branch" 2>/dev/null)
+    if echo "$existing" | grep -q "!"; then
+        echo "MR already exists for branch $branch:"
+        echo "$existing"
+        return 0
+    fi
+
+    echo "Creating MR for branch $branch -> main ..."
+    glab mr create --source-branch "$branch" --target-branch main --fill --yes
+}
+
+function glab-mr-merge-current() {
+    local branch=$(git branch --show-current)
+    if [ "$branch" = "main" ]; then
+        echo "on main branch, nothing to merge"
+        return 1
+    fi
+
+    local existing=$(glab mr list --source-branch="$branch" 2>/dev/null)
+    if ! echo "$existing" | grep -q "!"; then
+        echo "no MR found for branch $branch"
+        return 1
+    fi
+
+    echo "Merging MR for branch $branch ..."
+    if ! glab mr merge "$branch" --squash; then
+        echo "merge failed, showing MR details:"
+        glab mr view "$branch"
+        return 1
+    fi
 }
 
 # :vim set ft=zsh:

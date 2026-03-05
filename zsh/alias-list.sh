@@ -35,7 +35,7 @@ alias k="kubectl"
 alias kg="k get"
 alias kgw="kg -o wide"
 alias kgy="kg -o yaml"
-alias kgj="kg -o j"
+alias kgj="kg -o json"
 alias ke="k exec -it"
 alias kd="k describe"
 alias kdp="kd po"
@@ -54,6 +54,8 @@ alias kxcp="kxc | pbcopy"
 
 # go
 alias gomt="go mod tidy"
+alias gomg="go mod graph"
+alias gomw="go mod why"
 alias gobu="go build ./..."
 alias govt="go vet ./..."
 alias gotest="go test ./..."
@@ -66,3 +68,5 @@ alias get-local-ip="ifconfig| grep 'inet ' | grep '10.' | awk '{print \$2}'"
 alias python="python3"
 alias py="python"
 alias pyvenv="python -m venv .venv && source .venv/bin/activate"
+
+alias cc='claude --permission-mode plan'
