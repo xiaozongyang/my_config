@@ -433,4 +433,14 @@ function glab-mr-merge-current() {
     fi
 }
 
+function glab-mr-view-comments() {
+    local branch=$(git branch --show-current)
+    if [ "$branch" = "main" ]; then
+        echo "on main branch, nothing to merge"
+        return 1
+    fi
+
+    glab mr view --comments $branch
+}
+
 # :vim set ft=zsh:

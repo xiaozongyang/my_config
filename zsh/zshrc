@@ -55,21 +55,19 @@ _installed "hub" && alias git="hub"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 _installed "jenv" && eval "$(jenv init -)"
-# _installed "ssh-agent" && eval ssh-agent
 
-################ oh-my-zsh plugins ########################
-#plugins=(
-#    git
-#    mvn
-#    autojump
-#    osx
-#    pip
-#    jira
-#    sudo
-#    tmux
-#    brew
-#    docker
-#)
+function precmd() {
+    if [[ -n "$TMUX" ]]; then
+        local dir="${PWD##*/}"
+        local branch=$(git branch --show-current 2>/dev/null)
+        if [[ -n "$branch" ]]; then
+            printf '\033]2;%s(%s)\033\\' "$dir" "$branch"
+        else
+            printf '\033]2;%s\033\\' "$dir"
+        fi
+    fi
+}
+
 
 ############### Document Settings for VIM #################
 # :vim se ft=sh:

@@ -29,6 +29,8 @@ alias grbo="grb origin"
 alias grbom="grb origin/main"
 alias gco="g checkout"
 alias gcob="g checkout -b"
+alias gbr="git branch"
+alias gbrsc="git branch --show-current"
 
 # kubectl
 alias k="kubectl"
@@ -69,4 +71,5 @@ alias python="python3"
 alias py="python"
 alias pyvenv="python -m venv .venv && source .venv/bin/activate"
 
-alias cc='claude --permission-mode plan'
+alias cc='claude'
+alias ccp='--permission-mode plan'
