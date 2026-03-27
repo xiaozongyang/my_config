@@ -31,6 +31,7 @@ alias gco="g checkout"
 alias gcob="g checkout -b"
 alias gbr="git branch"
 alias gbrsc="git branch --show-current"
+alias gprb="git pull --rebase"
 
 # kubectl
 alias k="kubectl"
@@ -73,3 +74,6 @@ alias pyvenv="python -m venv .venv && source .venv/bin/activate"
 
 alias cc='claude'
 alias ccp='--permission-mode plan'
+alias cc-resolve-conflicts="cc '/resolve-conflicts'"
+alias ccupdate="brew upgrade claude-code"
+alias cc-git-tag="cc '/git-tag'"

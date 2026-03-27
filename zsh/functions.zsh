@@ -409,7 +409,7 @@ function git-push-mr() {
     fi
 
     echo "Creating MR for branch $branch -> main ..."
-    glab mr create --source-branch "$branch" --target-branch main --fill --yes
+    glab mr create --source-branch "$branch" --target-branch main --fill --yes --remove-source-branch=true
 }
 
 function glab-mr-merge-current() {
@@ -431,6 +431,15 @@ function glab-mr-merge-current() {
         glab mr view "$branch"
         return 1
     fi
+}
+
+function glab-mr-current() {
+    local branch=$(git branch --show-current)
+    if [ "$branch" = "main" ]; then
+        echo "on main branch, nothing to merge"
+        return 1
+    fi
+    glab mr view $branch
 }
 
 function glab-mr-view-comments() {
