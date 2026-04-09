@@ -72,8 +72,14 @@ alias python="python3"
 alias py="python"
 alias pyvenv="python -m venv .venv && source .venv/bin/activate"
 
+# system
+alias rm="trash"
+
+# claude
 alias cc='claude'
 alias ccp='--permission-mode plan'
-alias cc-resolve-conflicts="cc '/resolve-conflicts'"
 alias ccupdate="brew upgrade claude-code"
+alias ccusage="npx ccusage"
+
 alias cc-git-tag="cc '/git-tag'"
+alias cc-resolve-conflicts="cc '/resolve-conflicts'"

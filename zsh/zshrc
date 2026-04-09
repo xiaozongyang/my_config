@@ -68,6 +68,8 @@ function precmd() {
     fi
 }
 
+plugins=(z git)
+
 
 ############### Document Settings for VIM #################
 # :vim se ft=sh:

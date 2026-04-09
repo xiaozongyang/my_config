@@ -452,4 +452,13 @@ function glab-mr-view-comments() {
     glab mr view --comments $branch
 }
 
+function copypath() {
+    if [ -z "$1" ]; then
+        echo "Usage: copypath <file>"
+        return 1
+    fi
+    local f="$1"
+    realpath "$f" | pbcopy
+}
+
 # :vim set ft=zsh:
