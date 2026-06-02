@@ -47,6 +47,7 @@ alias kcf="k create -f"
 alias kdff="k diff -f"
 alias kafd="k apply --dry-run=server -f"
 alias kdel="k delete"
+alias ked="k edit"
 alias kdelf="kdel -f"
 alias kcgc="kubectl config get-contexts"
 
@@ -83,3 +84,6 @@ alias ccusage="npx ccusage"
 
 alias cc-git-tag="cc '/git-tag'"
 alias cc-resolve-conflicts="cc '/resolve-conflicts'"
+
+# docker-buildx
+alias docker-buildx-multi-arch="docker-buildx build --platform linux/amd64,linux/arm64 --provenance=false"

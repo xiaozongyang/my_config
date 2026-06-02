@@ -140,6 +140,20 @@ function k-set-default-ns() {
     kubectl config set-context --current --namespace=$1
 }
 
+function k-set-deploy-replicas() {
+    if [ -z $1 ] || [ -z $2 ]; then
+        echo "Usage: k-set-deploy-replicas <deploy> <replicas> [namespace]"
+        return 1
+    fi
+
+    cmd="kubectl patch deployment $1 -p '{\"spec\":{\"replicas\":${2}}}'"
+    if [ ! -z $3 ]; then
+        cmd="$cmd -n $3"
+    fi
+    echo $cmd
+    eval $cmd
+}
+
 function k-set-deploy-replicas-to-0() {
     if [ -z $1 ]; then
         echo "Usage: k-set-deploy-replicas-to-0 <deploy>"
@@ -459,6 +473,14 @@ function copypath() {
     fi
     local f="$1"
     realpath "$f" | pbcopy
+}
+
+function k-port-forward-vmagent() {
+    if [ -z $1 ]; then
+        echo "Usage: k-port-forward-vmagent <pod>"
+        return 1
+    fi
+    k port-forward -n mon-sys $1 8429:8429
 }
 
 # :vim set ft=zsh:
